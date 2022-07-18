@@ -13,7 +13,7 @@ export default function SignIn() {
     e.preventDefault();
 
     let options = { redirect: false, email, password };
-    const res = await signIn("username-login", options);
+    const res = await signIn("Credentials", options);
     setMessage(null);
     if (res?.error) {
       setMessage(res.error);
