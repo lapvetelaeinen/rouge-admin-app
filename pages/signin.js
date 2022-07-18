@@ -1,7 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Router from "next/router";
 import { useEffect, useState } from "react";
-import connectDB from "./api/auth/lib/connectDB";
+import connectDB from "./api/lib/connectDB";
 import axios from "axios";
 
 export default function SignIn() {
