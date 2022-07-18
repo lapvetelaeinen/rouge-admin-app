@@ -51,9 +51,10 @@ export default NextAuth({
       return session;
     },
   },
-  secret: "test",
+
   jwt: {
-    encryption: false,
+    secret: "test",
+    encryption: true,
   },
   pages: {
     signIn: "/signin",
