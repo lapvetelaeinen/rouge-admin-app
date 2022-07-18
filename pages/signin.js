@@ -13,11 +13,12 @@ export default function SignIn() {
     e.preventDefault();
 
     let options = { redirect: false, email, password };
-    const res = await signIn("Credentials", options);
+    const res = await signIn("credentials", options);
+    console.log("jahapgpp");
     setMessage(null);
     if (res?.error) {
       setMessage(res.error);
-      console.log(res.error);
+
       return;
     }
     return Router.push("/");
