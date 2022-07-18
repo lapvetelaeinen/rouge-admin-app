@@ -1,11 +1,10 @@
 import { useSession } from "next-auth/react";
-import Router from "next/router";
 
-export default function Home() {
+export default function Admin() {
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
-      Router.push("/signin");
+      // The user is not authenticated, handle it here.
     },
   });
 
@@ -13,5 +12,5 @@ export default function Home() {
     return "Loading or not authenticated...";
   }
 
-  Router.push("/admin/dashboard");
+  return "User is logged in";
 }
