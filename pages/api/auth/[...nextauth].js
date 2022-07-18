@@ -53,7 +53,7 @@ export default NextAuth({
   },
   secret: "test",
   jwt: {
-    encryption: true,
+    encryption: false,
   },
   pages: {
     signIn: "/signin",
