@@ -34,6 +34,7 @@ export default NextAuth({
       },
     }),
   ],
+  secret: "PLACE-HERE-ANY-STRING",
   callbacks: {
     jwt: ({ token, user }) => {
       // first time jwt callback is run, user object is available
@@ -51,8 +52,9 @@ export default NextAuth({
       return session;
     },
   },
-  secret: "test",
+
   jwt: {
+    secret: "test",
     encryption: true,
   },
   pages: {
