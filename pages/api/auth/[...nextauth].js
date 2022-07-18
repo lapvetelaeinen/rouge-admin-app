@@ -19,6 +19,7 @@ export default NextAuth({
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
+      secret: process.env.NEXTAUTH_SECRET,
       async authorize(credentials, req) {
         // make email to lowercase before sign in
         const email = credentials.email.toLowerCase();
