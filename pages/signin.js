@@ -17,6 +17,7 @@ export default function SignIn() {
     setMessage(null);
     if (res?.error) {
       setMessage(res.error);
+      console.log(res.error);
       return;
     }
     return Router.push("/");
