@@ -51,13 +51,12 @@ export default NextAuth({
       return session;
     },
   },
-  useSecureCookies: false,
   secret: "test",
   jwt: {
     encryption: true,
   },
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/signin",
   },
   database: process.env.MONGODB_URI,
 });
