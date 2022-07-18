@@ -51,10 +51,11 @@ export default NextAuth({
       return session;
     },
   },
+  useSecureCookies: false,
   secret: "test",
-  // jwt: {
-  //   encryption: true,
-  // },
+  jwt: {
+    encryption: true,
+  },
   pages: {
     signIn: "/auth/signin",
   },
