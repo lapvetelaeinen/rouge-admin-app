@@ -76,6 +76,9 @@ export default function SignIn() {
             Let the party begin!!
           </button>
         </form>
+        <button type="button" onClick={() => signIn()}>
+          lala
+        </button>
       </div>
     </div>
   );
