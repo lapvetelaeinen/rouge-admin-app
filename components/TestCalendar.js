@@ -62,9 +62,20 @@ function TestCalendar() {
       <>
         <tr className="border-b-2 border-neutral-400">
           <td className="bg-slate-300 py-2 px-4 w-1 text-center">
-            <p suppressHydrationWarning={true}>{day[1]}</p>
+            <p suppressHydrationWarning={true}>{day.getDate()}</p>
             <p suppressHydrationWarning={true} className="text-xs">
-              {day.getDate()}
+              {day.getMonth() == 0 && "jan"}
+              {day.getMonth() == 1 && "feb"}
+              {day.getMonth() == 2 && "mar"}
+              {day.getMonth() == 3 && "apr"}
+              {day.getMonth() == 4 && "maj"}
+              {day.getMonth() == 5 && "jun"}
+              {day.getMonth() == 6 && "jul"}
+              {day.getMonth() == 7 && "aug"}
+              {day.getMonth() == 8 && "sep"}
+              {day.getMonth() == 9 && "okt"}
+              {day.getMonth() == 10 && "nov"}
+              {day.getMonth() == 11 && "dec"}
             </p>
           </td>
           <td
