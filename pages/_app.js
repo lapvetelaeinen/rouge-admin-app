@@ -19,10 +19,10 @@ function MyApp({
     throw new Error(`isPassedToWithAuthenticator was not provided`);
   }
   return (
-    <SessionProvider session={session}>
+    <>
       <Component {...pageProps} />
       <button onClick={signOut}>Sign out</button>
-    </SessionProvider>
+    </>
   );
 }
 

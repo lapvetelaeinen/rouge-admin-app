@@ -52,9 +52,9 @@ export default function Create() {
         //   authMode: "AMAZON_COGNITO_USER_POOLS",
         // });
 
-        console.log("New event created successfully:", createNewEvent);
+        console.log("New event created successfully:", createNewEventInput);
 
-        router.push(`/`);
+        router.push(`/admin/dashboard`);
       } catch (error) {
         console.error("Error uploading file: ", error);
       }
