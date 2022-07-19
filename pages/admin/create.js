@@ -113,43 +113,25 @@ export default function Create() {
   };
 
   return (
-    <main className="bg-neutral-800">
-      <div className="bg-orange-300">
-        <p>Please select a file to upload</p>
-        <input type="file" onChange={(e) => selectFile(e)} />
-        {file && (
-          <>
-            <p>Selected file: {file.name}</p>
-            <button
-              onClick={uploadFile}
-              className=" bg-purple-500 text-white p-2 rounded-sm shadow-md hover:bg-purple-700 transition-all"
-            >
-              Upload a File!
-            </button>
-          </>
-        )}
-        {uploadingStatus && <p>{uploadingStatus}</p>}
-        {uploadedFile && <img src={uploadedFile} />}
-      </div>
-      <div className="p-4">
-        <h1 className="pb-8 text-2xl text-violet-300">
-          Skapa ett nytt evenemang
-        </h1>
+    <main className="bg-orange-100 min-h-screen">
+      <h1 className="pb-8 text-4xl text-violet-800 pl-2">Skapa nytt event</h1>
 
+      <div className="p-2 bg-orange-200 m-2 rounded-lg shadow-md">
         <form
           onSubmit={handleSubmit(onSubmit)}
           autoComplete="off"
-          className="flex flex-col"
+          className="flex flex-col gap-3"
         >
           <input
             type="text"
             placeholder="Titel"
             name="title"
             {...register("title")}
+            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
 
           <DatePicker
-            className="bg-violet-200 rounded-md p-4 border-2 border-violet-300"
+            className="bg-violet-300 rounded-md p-4 text-neutral-700 shadow-sm w-full"
             selected={selectedDate}
             onChange={(date) => setSelectedDate(date)}
           />
@@ -159,21 +141,39 @@ export default function Create() {
             placeholder="Beskrivning"
             name="description"
             {...register("description")}
+            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
-
-          <label>
+          <div className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm">
+            <p>Ladda upp en bild</p>
+            <input type="file" onChange={(e) => selectFile(e)} />
+            {file && (
+              <>
+                <p>Selected file: {file.name}</p>
+                <button
+                  onClick={uploadFile}
+                  className=" bg-purple-500 text-white p-2 rounded-sm shadow-md hover:bg-purple-700 transition-all"
+                >
+                  Upload a File!
+                </button>
+              </>
+            )}
+            {uploadingStatus && <p>{uploadingStatus}</p>}
+            {uploadedFile && <img src={uploadedFile} />}
+          </div>
+          {/* <label>
             Sälj biljetter?
             <select name="ticket">
               <option value="ja">Ja</option>
               <option value="nej">Nej</option>
             </select>
-          </label>
+          </label> */}
 
-          <input
+          {/* <input
             type="number"
             name="amount"
             placeholder="Antal"
             {...register("amount")}
+            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
 
           <input
@@ -181,8 +181,13 @@ export default function Create() {
             name="price"
             placeholder="Pris"
             {...register("price")}
+            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+          /> */}
+          <input
+            type="submit"
+            className="p-4 bg-violet-600 placeholder-neutral-700 text-neutral-300 rounded-md shadow-sm"
+            value="Skapa"
           />
-          <input type="submit" className="bg-orange-600" />
         </form>
       </div>
     </main>

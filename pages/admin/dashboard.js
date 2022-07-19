@@ -44,7 +44,10 @@ export default function Dashboard() {
       <div className="pt-10 pb-10">
         <h2 className="text-2xl pl-2 pb-4">Vad vill du göra idag?</h2>
         <div className={styles.mediaScroller}>
-          <div className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4">
+          <div
+            className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4"
+            onClick={() => Router.push("/admin/create")}
+          >
             <Add width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Skapa event</p>
           </div>
