@@ -117,7 +117,7 @@ export default function Create() {
       <h1 className="pb-8 text-4xl text-violet-800 pl-2">Skapa nytt event</h1>
 
       <div className="bg-orange-200 rounded-lg shadow-md">
-        {/* <form
+        <form
           onSubmit={handleSubmit(onSubmit)}
           autoComplete="off"
           className="flex flex-col gap-3"
@@ -130,11 +130,11 @@ export default function Create() {
             className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
 
-          <DatePicker
+          {/* <DatePicker
             className="bg-violet-300 rounded-md p-4 text-neutral-700 shadow-sm w-full"
             selected={selectedDate}
             onChange={(date) => setSelectedDate(date)}
-          />
+          /> */}
 
           <input
             type="text"
@@ -143,7 +143,7 @@ export default function Create() {
             {...register("description")}
             className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
-          <div className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm">
+          {/* <div className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm">
             <p>Ladda upp en bild</p>
             <input type="file" onChange={(e) => selectFile(e)} />
             {file && (
@@ -160,7 +160,7 @@ export default function Create() {
             {uploadingStatus && <p>{uploadingStatus}</p>}
             {uploadedFile && <img src={uploadedFile} />}
           </div> */}
-        {/* <label>
+          {/* <label>
             Sälj biljetter?
             <select name="ticket">
               <option value="ja">Ja</option>
@@ -168,7 +168,7 @@ export default function Create() {
             </select>
           </label> */}
 
-        {/* <input
+          {/* <input
             type="number"
             name="amount"
             placeholder="Antal"
@@ -183,12 +183,12 @@ export default function Create() {
             {...register("price")}
             className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           /> */}
-        {/* <input
+          <input
             type="submit"
             className="p-4 bg-violet-600 placeholder-neutral-700 text-neutral-300 rounded-md shadow-sm"
             value="Skapa"
           />
-        </form> */}
+        </form>
       </div>
     </div>
   );
