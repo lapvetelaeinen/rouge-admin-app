@@ -3,10 +3,14 @@ import CredentialProvider from "next-auth/providers/credentials";
 import connectDB from "../lib/connectDB";
 import Users from "../../../models/userModel";
 import bcrypt from "bcrypt";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import clientPromise from "../../../lib/mongodb";
+import EmailProvider from "next-auth/providers/email";
 
 connectDB();
 
 export default NextAuth({
+  adapter: MongoDBAdapter(clientPromise),
   providers: [
     CredentialProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
@@ -34,6 +38,17 @@ export default NextAuth({
         }
       },
     }),
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST,
+        port: process.env.EMAIL_SERVER_PORT,
+        auth: {
+          user: process.env.EMAIL_SERVER_USER,
+          pass: process.env.EMAIL_SERVER_PASSWORD,
+        },
+      },
+      from: process.env.EMAIL_FROM,
+    }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
 
@@ -60,7 +75,7 @@ export default NextAuth({
     encryption: true,
   },
   pages: {
-    signIn: "/signin",
+    signIn: "/auth/signin",
   },
   database: process.env.MONGODB_URI,
 });
