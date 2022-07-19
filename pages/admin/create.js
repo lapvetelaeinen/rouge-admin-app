@@ -130,11 +130,11 @@ export default function Create() {
             className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
 
-          {/* <DatePicker
+          <DatePicker
             className="bg-violet-300 rounded-md p-4 text-neutral-700 shadow-sm w-full"
             selected={selectedDate}
             onChange={(date) => setSelectedDate(date)}
-          /> */}
+          />
 
           <input
             type="text"
