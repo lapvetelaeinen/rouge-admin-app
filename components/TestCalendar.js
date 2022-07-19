@@ -52,26 +52,32 @@ function TestCalendar() {
     // }
     const allDays = Array(7)
       .fill(new Date(date))
-      .map((el, idx) =>
-        new Date(
-          el.setDate(el.getDate() - el.getDay() + (idx + 1))
-        ).toLocaleString("se-SE", options)
+      .map(
+        (el, idx) =>
+          new Date(el.setDate(el.getDate() - el.getDay() + (idx + 1)))
       );
+    console.log(allDays);
 
     return allDays.map((day) => (
       <>
         <tr className="border-b-2 border-neutral-400">
           <td className="bg-slate-300 py-2 px-4 w-1 text-center">
-            <p suppressHydrationWarning={true}>{day.split(" ")[1]}</p>
+            <p suppressHydrationWarning={true}>{day[1]}</p>
             <p suppressHydrationWarning={true} className="text-xs">
-              {day.split(" ")[2].substring(0, 3)}
+              {day.getDate()}
             </p>
           </td>
           <td
             suppressHydrationWarning={true}
             className="bg-slate-200 py-2 px-4"
           >
-            {day.split(" ")[0]}
+            {day.getDay() == 1 && "måndag"}
+            {day.getDay() == 2 && "tisdag"}
+            {day.getDay() == 3 && "onsdag"}
+            {day.getDay() == 4 && "torsdag"}
+            {day.getDay() == 5 && "fredag"}
+            {day.getDay() == 6 && "lördag"}
+            {day.getDay() == 0 && "söndag"}
           </td>
           <td className="bg-slate-100 py-2 px-4 w-full">Tentafest</td>
         </tr>
