@@ -10,6 +10,11 @@
       "StackName": "amplify-rougeadminapp-dev-85637",
       "StackId": "arn:aws:cloudformation:eu-west-2:513409742618:stack/amplify-rougeadminapp-dev-85637/f18bed10-072f-11ed-af27-02dce7c0313e",
       "AmplifyAppId": "d3hvqrdseof0t9"
+    },
+    "categories": {
+      "auth": {
+        "rougeadminappca4235f2": {}
+      }
     }
   }
 }
