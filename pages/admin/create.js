@@ -116,7 +116,7 @@ export default function Create() {
     <div className="min-h-screen w-full bg-orange-100">
       <h1 className="pb-8 text-4xl text-violet-800 pl-2">Skapa nytt event</h1>
 
-      <div className="p-2 bg-orange-200 m-2 rounded-lg shadow-md">
+      <div className="bg-orange-200 rounded-lg shadow-md">
         <form
           onSubmit={handleSubmit(onSubmit)}
           autoComplete="off"
