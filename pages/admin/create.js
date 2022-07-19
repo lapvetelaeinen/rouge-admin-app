@@ -143,7 +143,7 @@ export default function Create() {
             {...register("description")}
             className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
-          {/* <div className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm">
+          <div className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm">
             <p>Ladda upp en bild</p>
             <input type="file" onChange={(e) => selectFile(e)} />
             {file && (
@@ -159,7 +159,7 @@ export default function Create() {
             )}
             {uploadingStatus && <p>{uploadingStatus}</p>}
             {uploadedFile && <img src={uploadedFile} />}
-          </div> */}
+          </div>
           {/* <label>
             Sälj biljetter?
             <select name="ticket">
