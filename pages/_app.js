@@ -3,10 +3,10 @@ import React from "react";
 import { Amplify } from "aws-amplify";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
-import config from "../src/aws-exports";
+import awsmobile from "../src/aws-exports";
 import "../styles/globals.css";
 
-Amplify.configure({ ...config, ssr: true });
+Amplify.configure({ ...awsmobile, ssr: true });
 
 function MyApp({
   isPassedToWithAuthenticator,
