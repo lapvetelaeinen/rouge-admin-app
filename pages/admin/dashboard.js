@@ -1,26 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { signOut } from "next-auth/react";
+
 import Router from "next/router";
-import Calendar from "../../components/Calendar";
+
 import TestCalendar from "../../components/TestCalendar";
 import dayjs from "dayjs";
 import dayOfYear from "dayjs/plugin/dayOfYear";
 import isoWeek from "dayjs/plugin/isoWeek";
-import TimeDisplay from "../../components/TimeDisplay";
+
 import FilterButton from "../../components/FilterButton";
 import SalesCard from "../../components/SalesCard";
-import FunctionCard from "../../components/FunctionCard";
+
 import styles from "../../styles/Dashboard.module.css";
 import Add from "../../components/svg-components/Add";
 import Ticket from "../../components/svg-components/Ticket";
 import Chat from "../../components/svg-components/Chat";
 import Download from "../../components/svg-components/Download";
+import { Auth } from "aws-amplify";
+import { Amplify } from "aws-amplify";
 
 dayjs.extend(dayOfYear);
 dayjs.extend(isoWeek);
 
 export default function Dashboard() {
   const [dates, setDates] = useState([]);
+  const [user, updateUser] = useState(null);
+
+  useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then((user) => {
+        console.log("User: ", user);
+        updateUser(user);
+      })
+      .catch((err) => updateUser(null));
+  }, []);
 
   // const omfg = () => {
   //   const today = dayjs().dayOfYear();
@@ -38,9 +50,15 @@ export default function Dashboard() {
 
   console.log(dayjs().isoWeek());
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-h-screen bg-orange-100">
-      <h1 className="text-4xl font-medium pl-2 pt-10">Välkommen Saba!</h1>
+      <h1 className="text-4xl font-medium pl-2 pt-10">
+        Välkommen {capitalizeFirstLetter(user.username)}
+      </h1>
       <div className="pt-10 pb-10">
         <h2 className="text-2xl pl-2 pb-4">Vad vill du göra idag?</h2>
         <div className={styles.mediaScroller}>
