@@ -143,6 +143,11 @@ export default function Create() {
             {...register("description")}
             className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
+
+          {/*
+          image upload causes problem with display on mobile
+          */}
+
           <div className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm">
             <p>Ladda upp en bild</p>
             <input type="file" onChange={(e) => selectFile(e)} />
