@@ -39,7 +39,7 @@ export default function Dashboard() {
   console.log(dayjs().isoWeek());
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-h-screen bg-neutral-50 bg-orange-100">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-h-screen bg-orange-100">
       <h1 className="text-4xl font-medium pl-2 pt-10">Välkommen Saba!</h1>
       <div className="pt-10 pb-10">
         <h2 className="text-2xl pl-2 pb-4">Vad vill du göra idag?</h2>
