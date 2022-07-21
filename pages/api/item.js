@@ -11,6 +11,7 @@ export default async function handler(req, res) {
       date: req.body.date,
       description: req.body.description,
       createdAt: Date.now(),
+      tickets: req.body.tickets,
     };
 
     await dynamoDb.put({
