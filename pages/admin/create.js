@@ -28,6 +28,12 @@ export default function Create() {
     console.log(file);
     console.log(data);
 
+    const rawTickets = [
+      { class: data.ticketclass, price: data.price, amount: data.amount },
+    ];
+
+    console.log(rawTickets);
+
     // User uploaded file
     if (file) {
       // Send a request to upload to the S3 Bucket.
@@ -43,6 +49,7 @@ export default function Create() {
           image: file.name,
           date: selectedDate,
           description: data.description,
+          tickets: rawTickets,
         };
 
         addEvent(createNewEventInput);
@@ -54,7 +61,7 @@ export default function Create() {
 
         console.log("New event created successfully:", createNewEventInput);
 
-        router.push(`/admin/dashboard`);
+        // router.push(`/admin/dashboard`);
       } catch (error) {
         console.error("Error uploading file: ", error);
       }
@@ -188,6 +195,31 @@ export default function Create() {
             {...register("price")}
             className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           /> */}
+
+          <input
+            type="text"
+            placeholder="Biljettklass"
+            name="ticketclass"
+            {...register("ticketclass")}
+            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+          />
+
+          <input
+            type="number"
+            placeholder="Pris"
+            name="price"
+            {...register("price")}
+            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+          />
+
+          <input
+            type="number"
+            placeholder="Antal"
+            name="amount"
+            {...register("amount")}
+            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+          />
+
           <input
             type="submit"
             className="p-4 bg-violet-600 placeholder-neutral-700 text-neutral-300 rounded-md shadow-sm"
