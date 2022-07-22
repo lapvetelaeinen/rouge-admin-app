@@ -5,6 +5,7 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import awsmobile from "../src/aws-exports";
 import "../styles/globals.css";
+import { SelectedEventProvider } from "../contexts/SelectedEventContext";
 
 Amplify.configure({ ...awsmobile, ssr: true });
 
@@ -19,10 +20,10 @@ function MyApp({
     throw new Error(`isPassedToWithAuthenticator was not provided`);
   }
   return (
-    <>
+    <SelectedEventProvider>
       <Component {...pageProps} />
       <button onClick={signOut}>Sign out</button>
-    </>
+    </SelectedEventProvider>
   );
 }
 

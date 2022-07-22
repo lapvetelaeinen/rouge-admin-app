@@ -1,10 +1,30 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import axios from "axios";
+import useSWR from "swr";
+import EventListTile from "../../components/EventListTile";
+import Times from "../../components/svg-components/Times";
+import { SelectedEventContext } from "../../contexts/SelectedEventContext";
+import { useContext } from "react";
+
+const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 export default function AddTickets() {
   const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
+  const { selectedEvent } = useContext(SelectedEventContext);
+
+  const [value, setValue] = useState("fruit");
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    console.log(event.target.value);
+  };
+
+  const fetched = useSWR("/api/events", fetcher);
+
+  const allEvents = fetched.data;
 
   const {
     register,
@@ -13,6 +33,11 @@ export default function AddTickets() {
   } = useForm();
 
   const addTicket = async (params) => {
+    const slugToRevalidate = selectedEvent.eventId;
+    await axios.post(
+      "https://rouge-frontend.vercel.app/api/revalidate-event?secret=gkmn12714",
+      slugToRevalidate
+    );
     await axios.post("/api/addticket", params);
   };
 
@@ -20,127 +45,101 @@ export default function AddTickets() {
     console.log(data);
 
     const newTicket = [
-      { class: data.ticketclass, price: data.price, amount: data.amount },
+      {
+        class: data.ticketclass,
+        price: data.price,
+        amount: data.amount,
+        eventId: selectedEvent.eventId,
+      },
     ];
 
-    // User uploaded file
     if (data) {
-      // Send a request to upload to the S3 Bucket.
-
-      // await Storage.put(imagePath, file, {
-      //   contentType: file.type, // contentType is optional
-      // });
-
       const createNewTicketInput = {
         ticket: newTicket,
       };
 
       addTicket(createNewTicketInput);
-      // const createNewEvent = await API.graphql({
-      //   query: createEvent,
-      //   variables: { input: createNewEventInput },
-      //   authMode: "AMAZON_COGNITO_USER_POOLS",
-      // });
-
-      console.log("New ticket created successfully:", createNewTicketInput);
 
       // router.push(`/admin/dashboard`);
     } else {
-      const createNewEventWithoutImageInput = {
-        title: data.title,
-        date: selectedDate,
-        amount: data.amount,
-        price: data.price,
-        description: data.description,
-      };
-
-      const createNewEventWithoutImage = await API.graphql({
-        query: createEvent,
-        variables: { input: createNewEventWithoutImageInput },
-        authMode: "AMAZON_COGNITO_USER_POOLS",
-      });
-
-      router.push(`/event/${createNewEventWithoutImage.data.createEvent.id}`);
+      return;
     }
-  };
-
-  // Image upload below
-
-  const selectFile = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const BUCKET_URL = "https://rouge-event-images.s3.eu-west-2.amazonaws.com/";
-
-  const uploadFile = async () => {
-    setUploadingStatus("Uploading the file to AWS S3");
-
-    const imagePath = uuidv4();
-
-    let { data } = await axios.post("/api/s3/uploadFile", {
-      name: file.name,
-      type: file.type,
-    });
-
-    console.log(data);
-
-    const url = data.url;
-
-    console.log(url);
-
-    await axios.put(url, file, {
-      headers: {
-        "Content-type": file.type,
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-
-    setUploadedFile(BUCKET_URL + file.name);
-    setFile(null);
   };
 
   return (
     <div className="min-h-screen w-full bg-orange-100">
-      <h1 className="pb-8 text-4xl text-violet-800 pl-2">
-        Skapa nya biljetter
-      </h1>
+      <div className="">
+        {showModal ? (
+          <div className="bg-neutral-800 absolute z-50 h-full w-full flex justify-center items-start bg-opacity-80">
+            <div className="bg-neutral-200 w-full min-h-[700px] m-4 rounded-3xl">
+              <div className="flex flex-col">
+                <div className="flex justify-between p-1 mb-8 items-center">
+                  <p className="text-xl pl-2 pt-2">{selectedEvent.title}</p>
+                  <Times
+                    width={50}
+                    height={50}
+                    fill="#f57971"
+                    onClick={() => setShowModal(!showModal)}
+                  />
+                </div>
+                <div className="bg-neutral-200 m-2 rounded-lg">
+                  <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    autoComplete="off"
+                    className="flex flex-col gap-3"
+                  >
+                    <input
+                      type="text"
+                      placeholder="Biljettklass"
+                      name="ticketclass"
+                      {...register("ticketclass")}
+                      className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                    />
 
-      <div className="bg-orange-200 rounded-lg shadow-md">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          autoComplete="off"
-          className="flex flex-col gap-3"
-        >
-          <input
-            type="text"
-            placeholder="Biljettklass"
-            name="ticketclass"
-            {...register("ticketclass")}
-            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
-          />
+                    <input
+                      type="number"
+                      placeholder="Pris"
+                      name="price"
+                      {...register("price")}
+                      className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                    />
 
-          <input
-            type="number"
-            placeholder="Pris"
-            name="price"
-            {...register("price")}
-            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
-          />
+                    <input
+                      type="number"
+                      placeholder="Antal"
+                      name="amount"
+                      {...register("amount")}
+                      className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                    />
 
-          <input
-            type="number"
-            placeholder="Antal"
-            name="amount"
-            {...register("amount")}
-            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
-          />
-
-          <input
-            type="submit"
-            className="p-4 bg-violet-600 placeholder-neutral-700 text-neutral-300 rounded-md shadow-sm"
-            value="Skapa"
-          />
-        </form>
+                    <input
+                      type="submit"
+                      className="p-4 bg-violet-600 placeholder-neutral-700 text-neutral-300 rounded-md shadow-sm"
+                      value="Skapa"
+                    />
+                  </form>
+                  <button onClick={() => console.log(selectedEvent.eventId)}>
+                    Test
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </div>
+      <h1 className="pb-8 text-4xl text-violet-800 pl-2">Dina event</h1>
+      <div className="flex flex-col gap-4">
+        {allEvents
+          ? allEvents.map((event) => (
+              <div key={event.eventId} onClick={() => setShowModal(!showModal)}>
+                <EventListTile
+                  key={event.eventId}
+                  id={event.eventId}
+                  event={event}
+                />
+              </div>
+            ))
+          : null}
       </div>
     </div>
   );
