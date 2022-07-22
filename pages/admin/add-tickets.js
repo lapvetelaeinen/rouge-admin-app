@@ -33,10 +33,10 @@ export default function AddTickets() {
   } = useForm();
 
   const addTicket = async (params) => {
-    const slugToRevalidate = selectedEvent.eventId;
+    const slug = { slugToRevalidate: selectedEvent.eventId };
     await axios.post(
       "https://rouge-frontend.vercel.app/api/revalidate-event?secret=gkmn12714",
-      slugToRevalidate
+      slug
     );
     await axios.post("/api/addticket", params);
   };
