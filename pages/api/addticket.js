@@ -5,11 +5,17 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     const { Attributes } = await dynamoDb.update({
       Key: {
-        eventId: "a0f5d69a-6ced-439f-89a2-b0449794a3fe",
+        eventId: req.body.ticket[0].eventId,
       },
       UpdateExpression: "SET tickets = list_append(tickets, :newtickets)",
       ExpressionAttributeValues: {
-        ":newtickets": [{ class: "student", price: 50, amount: 50 }],
+        ":newtickets": [
+          {
+            class: req.body.ticket[0].class,
+            price: req.body.ticket[0].price,
+            amount: req.body.ticket[0].amount,
+          },
+        ],
       },
       ReturnValues: "ALL_NEW",
     });
