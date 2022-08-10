@@ -69,7 +69,10 @@ export default function Dashboard() {
             <Add width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Skapa event</p>
           </div>
-          <div className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4">
+          <div
+            className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4"
+            onClick={() => Router.push("/admin/add-tickets")}
+          >
             <Ticket width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Släppa biljetter</p>
           </div>
@@ -83,7 +86,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="bg-orange-200">
+      <div className="bg-violet-200">
         <h2 className="text-3xl text-neutral-800 text-center pt-8">
           Försäljning
         </h2>

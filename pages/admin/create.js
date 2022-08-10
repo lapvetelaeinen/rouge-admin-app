@@ -5,14 +5,20 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import Times from "../../components/svg-components/Times";
 
 export default function Create() {
   const router = useRouter();
   const [uploadingStatus, setUploadingStatus] = useState();
   const [uploadedFile, setUploadedFile] = useState();
   const [file, setFile] = useState();
+  const [showModal, setShowModal] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const openModal = () => {
+    setShowModal(!showModal);
+  };
 
   const {
     register,
@@ -27,6 +33,8 @@ export default function Create() {
   const onSubmit = async (data) => {
     console.log(file);
     console.log(data);
+
+    openModal();
 
     const rawTickets = [
       { class: data.ticketclass, price: data.price, amount: data.amount },
@@ -49,7 +57,7 @@ export default function Create() {
           image: file.name,
           date: selectedDate,
           description: data.description,
-          tickets: rawTickets,
+          tickets: [],
         };
 
         addEvent(createNewEventInput);
@@ -121,9 +129,41 @@ export default function Create() {
 
   return (
     <div className="min-h-screen w-full bg-orange-100">
-      <h1 className="pb-8 text-4xl text-violet-800 pl-2">Skapa nytt event</h1>
+      {showModal ? (
+        <div className="bg-neutral-800 absolute z-50 h-full w-full flex justify-center items-center bg-opacity-80">
+          <div className="bg-neutral-200 w-full min-h-[300px] m-4 rounded-3xl mb-40">
+            <div className="flex flex-col">
+              <div className="flex justify-between p-1">
+                <p></p>
+                <Times
+                  width={50}
+                  height={50}
+                  fill="#f57971"
+                  onClick={() => setShowModal(!showModal)}
+                />
+              </div>
+              <h2 className="text-xl text-center mb-4">Snyggt!</h2>
+              <p className="text-center text-neutral-600 mb-4">
+                Vill du släppa biljetter till detta event? <br /> Du kan också
+                välja att göra detta senare.
+              </p>
+              <div className="mx-5">
+                <button
+                  className="bg-violet-400 w-full text-2xl font-steelfish text-neutral-700 rounded-lg py-6 shadow-lg"
+                  onClick={() => router.push("/admin/add-tickets")}
+                >
+                  Släpp biljetter
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+      <h1 className="pb-8 text-4xl text-neutral-700 pl-2 font-bold pt-14">
+        Skapa nytt event
+      </h1>
 
-      <div className="bg-orange-200 rounded-lg shadow-md">
+      <div className="bg-violet-200 rounded-lg shadow-md p-4 mx-2 mt-4">
         <form
           onSubmit={handleSubmit(onSubmit)}
           autoComplete="off"
@@ -134,11 +174,11 @@ export default function Create() {
             placeholder="Titel"
             name="title"
             {...register("title")}
-            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+            className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
 
           <DatePicker
-            className="bg-violet-300 rounded-md p-4 text-neutral-700 shadow-sm w-full"
+            className="bg-neutral-100 rounded-md p-4 text-neutral-700 shadow-sm w-full"
             selected={selectedDate}
             onChange={(date) => setSelectedDate(date)}
           />
@@ -148,29 +188,16 @@ export default function Create() {
             placeholder="Beskrivning"
             name="description"
             {...register("description")}
-            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+            className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
 
           {/*
           image upload causes problem with display on mobile
           */}
 
-          <div className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm">
+          <div className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm">
             <p>Ladda upp en bild</p>
             <input type="file" onChange={(e) => selectFile(e)} />
-            {file && (
-              <>
-                <p>Selected file: {file.name}</p>
-                <button
-                  onClick={uploadFile}
-                  className=" bg-purple-500 text-white p-2 rounded-sm shadow-md hover:bg-purple-700 transition-all"
-                >
-                  Upload a File!
-                </button>
-              </>
-            )}
-            {uploadingStatus && <p>{uploadingStatus}</p>}
-            {uploadedFile && <img src={uploadedFile} />}
           </div>
           {/* <label>
             Sälj biljetter?
@@ -197,27 +224,27 @@ export default function Create() {
           /> */}
 
           <input
-            type="text"
+            type="hidden"
             placeholder="Biljettklass"
             name="ticketclass"
             {...register("ticketclass")}
-            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+            className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
 
           <input
-            type="number"
+            type="hidden"
             placeholder="Pris"
             name="price"
             {...register("price")}
-            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+            className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
 
           <input
-            type="number"
+            type="hidden"
             placeholder="Antal"
             name="amount"
             {...register("amount")}
-            className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+            className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
           />
 
           <input

@@ -1,5 +1,6 @@
 import { SessionProvider } from "next-auth/react";
 import React from "react";
+import Layout from "../components/Layout.js";
 import { Amplify } from "aws-amplify";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
@@ -21,8 +22,10 @@ function MyApp({
   }
   return (
     <SelectedEventProvider>
-      <Component {...pageProps} />
-      <button onClick={signOut}>Sign out</button>
+      <Layout>
+        <Component {...pageProps} />
+        <button onClick={signOut}>Sign out</button>
+      </Layout>
     </SelectedEventProvider>
   );
 }
