@@ -159,9 +159,16 @@ export default function Create() {
           </div>
         </div>
       ) : null}
-      <h1 className="pb-8 text-4xl text-neutral-700 pl-2 font-bold pt-14">
-        Skapa nytt event
-      </h1>
+      <div className="pt-14 pb-20">
+        <h1 className="text-4xl text-center text-neutral-700 font-bold">
+          Skapa event
+        </h1>
+        <p className="text-center pt-6 px-4 text-neutral-500">
+          Håll era gäster uppdaterade genom att skapa nya events som automatiskt
+          visas på er hemsida. Vill du göra ändringar på ett event så kan du
+          klicka på ett av eventen i listan.
+        </p>
+      </div>
 
       <div className="bg-violet-200 rounded-lg shadow-md p-4 mx-2 mt-4">
         <form

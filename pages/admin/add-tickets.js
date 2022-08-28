@@ -228,10 +228,19 @@ export default function AddTickets() {
           </div>
         ) : null}
       </div>
-      <h1 className="pb-8 text-4xl text-neutral-700 pl-2 pt-14 font-bold">
-        Dina event
-      </h1>
-      <div className="flex flex-col gap-4 pt-5">
+      <div className="pt-14 pb-20">
+        <h1 className="text-center text-4xl text-neutral-700 font-bold">
+          Biljettsläpp
+        </h1>
+        <p className="text-center pt-6 px-4 text-neutral-500">
+          Välj ett event från listan för att lägga till nya biljetter eller för
+          att uppdatera pris och antal på gamla biljetter.
+        </p>
+      </div>
+      <p className="pl-4 pb-4 text-3xl font-bold text-neutral-600">
+        Dina events
+      </p>
+      <div className="flex flex-col gap-4">
         {allEvents
           ? allEvents.map((event) => (
               <div key={event.eventId} onClick={() => setShowModal(!showModal)}>

@@ -43,7 +43,7 @@ function Nav() {
             </Link>
             <Link href="/admin/add-tickets">
               <a href="" onClick={() => setIsOpen(!isOpen)} className="p-2">
-                Släpp biljetter
+                Biljettsläpp
               </a>
             </Link>
             <Link href="/">

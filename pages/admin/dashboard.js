@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import Router from "next/router";
-
+import axios from "axios";
 import TestCalendar from "../../components/TestCalendar";
 import dayjs from "dayjs";
 import dayOfYear from "dayjs/plugin/dayOfYear";
@@ -17,6 +17,8 @@ import Chat from "../../components/svg-components/Chat";
 import Download from "../../components/svg-components/Download";
 import { Auth } from "aws-amplify";
 import { Amplify } from "aws-amplify";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 dayjs.extend(dayOfYear);
 dayjs.extend(isoWeek);
@@ -24,6 +26,10 @@ dayjs.extend(isoWeek);
 export default function Dashboard() {
   const [dates, setDates] = useState([]);
   const [user, updateUser] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [allTickets, setAllTickets] = useState(null);
+  const [revenue, setRevenue] = useState(null);
+  const [isLoading, setIsLoading] = useState();
 
   useEffect(() => {
     Auth.currentAuthenticatedUser()
@@ -34,19 +40,44 @@ export default function Dashboard() {
       .catch((err) => updateUser(null));
   }, []);
 
-  // const omfg = () => {
-  //   const today = dayjs().dayOfYear();
-  //   const newDates = [...dates];
+  async function getTickets() {
+    const tickets = await axios.get(
+      "https://w8rzbuwc73.execute-api.eu-west-2.amazonaws.com/salesinfo/rouge-sales-info"
+    );
+    setAllTickets(tickets.data.Items);
 
-  //   for (let i = today; i < today + 30; i++) {
-  //     const date = dayjs("2022-01-01").dayOfYear(i);
-  //     newDates.push(date.date());
-  //     console.log(newDates);
-  //   }
+    let selectedTickets = [];
+    let totalRevenue = 0;
 
-  //   setDates(newDates);
-  //   console.log(dates);
-  // };
+    let date = selectedDate;
+    let newDate = date.toISOString().split("T")[0];
+
+    tickets.data.Items.map((ticket) => {
+      if (ticket.date === newDate && ticket.paymentStatus === "PAID") {
+        selectedTickets.push(ticket);
+        const paidAmount = parseInt(ticket.amount);
+        totalRevenue += paidAmount;
+        return;
+      }
+      return;
+    });
+    setAllTickets(selectedTickets);
+    setRevenue(totalRevenue);
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTickets();
+  }, [selectedDate]);
+
+  // useEffect(() => {
+  //   let selectedTickets;
+
+  //   allTickets.map((ticket) => {
+  //     console.log(ticket.owner);
+  //   });
+  // }, [selectedDate]);
 
   console.log(dayjs().isoWeek());
 
@@ -55,7 +86,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-h-screen bg-orange-100">
+    <div className="grid grid-cols-1 min-h-screen bg-orange-100">
       <h1 className="text-4xl font-medium pl-2 pt-10">
         Välkommen {user && capitalizeFirstLetter(user.username)}
       </h1>
@@ -63,24 +94,24 @@ export default function Dashboard() {
         <h2 className="text-2xl pl-2 pb-4">Vad vill du göra idag?</h2>
         <div className={styles.mediaScroller}>
           <div
-            className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4"
-            onClick={() => Router.push("/admin/create")}
+            className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1"
+            onClick={() => Router.push("/admin/dashboard")}
           >
             <Add width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Skapa event</p>
           </div>
           <div
-            className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4"
-            onClick={() => Router.push("/admin/add-tickets")}
+            className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1"
+            onClick={() => Router.push("/admin/dashboard")}
           >
             <Ticket width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Släppa biljetter</p>
           </div>
-          <div className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4">
+          <div className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1">
             <Chat width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Skicka notis</p>
           </div>
-          <div className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4">
+          <div className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1">
             <Download width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Ladda ner rapport</p>
           </div>
@@ -90,23 +121,27 @@ export default function Dashboard() {
         <h2 className="text-3xl text-neutral-800 text-center pt-8">
           Försäljning
         </h2>
+        {isLoading ? <p>Laddar...</p> : null}
         <div className="pb-10 pt-8">
-          <div className="p-2 flex justify-between">
-            <FilterButton time="1 vecka" />
-            <FilterButton time="1 månad" />
-            <FilterButton time="3 månader" />
-            <FilterButton time="1 år" />
+          <div className="px-4 flex justify-between">
+            <div>
+              <DatePicker
+                className="bg-neutral-200 rounded-md p-4 text-neutral-700 shadow-sm w-[30vw]"
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+              />
+            </div>
           </div>
-          <div className={styles.mediaScroller}>
-            <SalesCard type="Totalt" tickets="1337 st" cash="200,5k" />
-            <SalesCard type="Hooja" tickets="584 st" cash="116,2k" />
-            <SalesCard type="Dani M" tickets="370 st" cash="55,5k" />
-            <SalesCard type="Halloween" tickets="23 st" cash="1,1k" />
-            <SalesCard type="Myra Granberg" tickets="413 st" cash="74,3k" />
+          <div className={styles.salesScroller}>
+            <SalesCard
+              type="Totalt"
+              tickets={allTickets ? allTickets.length + " st" : null}
+              cash={revenue ? revenue + " SEK" : null}
+            />
           </div>
         </div>
       </div>
-      <div className=" bg-orange-100 pb-10 p-2">
+      <div className=" bg-orange-100 pb-10 px-4">
         <h2 className="text-3xl text-neutral-800 text-center py-8">Schema</h2>
         <TestCalendar />
       </div>

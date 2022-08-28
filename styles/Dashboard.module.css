@@ -7,3 +7,30 @@
   overscroll-behavior-inline: contain;
   scroll-snap-type: inline mandatory;
 }
+
+.salesScroller {
+  padding: 16px;
+  display: flex;
+  justify-items: center;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .mediaScroller {
+    padding: 16px 8px 40px 8px;
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+  }
+
+  .salesScroller {
+    padding: 16px 8px 40px 8px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+  }
+}
