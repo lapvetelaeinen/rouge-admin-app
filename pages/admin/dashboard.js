@@ -117,30 +117,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="bg-violet-200">
-        <h2 className="text-3xl text-neutral-800 text-center pt-8">
-          Försäljning
-        </h2>
-        {isLoading ? <p>Laddar...</p> : null}
-        <div className="pb-10 pt-8">
-          <div className="px-4 flex justify-between">
-            <div>
-              <DatePicker
-                className="bg-neutral-200 rounded-md p-4 text-neutral-700 shadow-sm w-[30vw]"
-                selected={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
-              />
-            </div>
-          </div>
-          <div className={styles.salesScroller}>
-            <SalesCard
-              type="Totalt"
-              tickets={allTickets ? allTickets.length + " st" : null}
-              cash={revenue ? revenue + " SEK" : null}
-            />
-          </div>
-        </div>
-      </div>
+
       <div className=" bg-orange-100 pb-10 px-4">
         <h2 className="text-3xl text-neutral-800 text-center py-8">Schema</h2>
         <TestCalendar />
