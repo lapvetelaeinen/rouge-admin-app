@@ -27,7 +27,7 @@ export default function Create() {
   } = useForm();
 
   const addEvent = async (params) => {
-    await axios.put("/api/item", params);
+    await axios.post("https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/create-event", params);
   };
 
   const onSubmit = async (data) => {
@@ -52,12 +52,13 @@ export default function Create() {
         //   contentType: file.type, // contentType is optional
         // });
 
+
+
         const createNewEventInput = {
-          title: data.title,
+          eventName: data.title.replace(/\s+/g, '-').toLowerCase() + "_" + selectedDate.toISOString().substring(0,10),
+          eventDate: selectedDate.toISOString().substring(0,10),
           image: file.name,
-          date: selectedDate,
           description: data.description,
-          tickets: [],
         };
 
         addEvent(createNewEventInput);
@@ -75,10 +76,8 @@ export default function Create() {
       }
     } else {
       const createNewEventWithoutImageInput = {
-        title: data.title,
-        date: selectedDate,
-        amount: data.amount,
-        price: data.price,
+        eventName: data.title,
+        eventDate: selectedDate.toISOString().substring(0,10),
         description: data.description,
       };
 
@@ -168,6 +167,7 @@ export default function Create() {
           visas på er hemsida. Vill du göra ändringar på ett event så kan du
           klicka på ett av eventen i listan.
         </p>
+
       </div>
 
       <div className="bg-violet-200 rounded-lg shadow-md p-4 mx-2 mt-4">
