@@ -27,9 +27,11 @@ export default function TicketsPage({ eventInfo }) {
   const onSubmit = async (data) => {
     const params = {
       eventName: eventInfo.eventName,
+      eventDate: eventInfo.eventDate,
       ticketClass: data.ticketClass,
       price: data.price,
       maxAmount: data.maxAmount,
+      isFirstTicket: allTickets.length > 0 ? "no" : "yes",
     };
 
     if (data) {
@@ -41,23 +43,22 @@ export default function TicketsPage({ eventInfo }) {
     } else {
       return;
     }
-    router.reload(window.location.pathname)
-
+    router.reload(window.location.pathname);
   };
 
   const deleteTicket = () => {
     const params = {
       eventName: eventInfo.eventName,
-      ticketClass: selectedTicketClass
-    }
+      ticketClass: selectedTicketClass,
+    };
 
+    axios.post(
+      "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/delete-ticket",
+      params
+    );
 
-    axios.post("https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/delete-ticket", params);
-
-
-    router.reload(window.location.pathname)
-    
-  }
+    router.reload(window.location.pathname);
+  };
 
   useEffect(() => {
     if (!allTickets) {
@@ -66,6 +67,9 @@ export default function TicketsPage({ eventInfo }) {
           `https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/get-tickets?eventName=${eventInfo.eventName}`
         )
         .then((res) => setAllTickets(res.data));
+    }
+    if (allTickets) {
+      console.log(allTickets.length);
     }
     return;
   });
@@ -129,7 +133,7 @@ export default function TicketsPage({ eventInfo }) {
         </div>
       ) : null}
 
-{showDeleteModal ? (
+      {showDeleteModal ? (
         <div className="">
           <div
             className="bg-neutral-800 z-40 absolute h-full w-full flex justify-center items-center bg-opacity-80"
@@ -147,10 +151,19 @@ export default function TicketsPage({ eventInfo }) {
                 />
               </div>
               <div className="px-10">
-                <p className="text-xl text-center pt-4">Är du säker på att du vill radera denna biljettklass?</p>
+                <p className="text-xl text-center pt-4">
+                  Är du säker på att du vill radera denna biljettklass?
+                </p>
                 <div className="flex justify-center gap-8 pt-8 pb-4">
-                  <button className="border-2 border-neutral-500 rounded-md text-md text-neutral-700 py-3 px-6">Behåll</button>
-                  <button className="bg-red-400 shadow-md rounded-md text-md py-3 px-6" onClick={(e) => deleteTicket(e)}>Radera</button>
+                  <button className="border-2 border-neutral-500 rounded-md text-md text-neutral-700 py-3 px-6">
+                    Behåll
+                  </button>
+                  <button
+                    className="bg-red-400 shadow-md rounded-md text-md py-3 px-6"
+                    onClick={(e) => deleteTicket(e)}
+                  >
+                    Radera
+                  </button>
                 </div>
               </div>
             </div>
@@ -178,7 +191,14 @@ export default function TicketsPage({ eventInfo }) {
         <div>
           {allTickets
             ? allTickets.map((ticket) => (
-                <TicketCard key={ticket.eventName} ticket={ticket} toggle={() => setShowDeleteModal(!showDeleteModal)} setSelectedTicketClass={(ticketClass) => setSelectedTicketClass(ticketClass)}/>
+                <TicketCard
+                  key={ticket.eventName}
+                  ticket={ticket}
+                  toggle={() => setShowDeleteModal(!showDeleteModal)}
+                  setSelectedTicketClass={(ticketClass) =>
+                    setSelectedTicketClass(ticketClass)
+                  }
+                />
               ))
             : null}
         </div>
