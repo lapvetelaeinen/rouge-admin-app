@@ -25,22 +25,21 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass }) {
   const handleTrash = () => {
     setShowSettings(false);
     toggle();
-  }
+  };
 
   const handleDotClick = () => {
     setShowSettings(true);
     setSelectedTicketClass(ticket.ticketClass);
-  }
+  };
 
   return (
-    
     <div
       key={ticket.eventName}
-      className="bg-violet-300 p-5 rounded-md shadow-lg mt-4 text-lg flex justify-between"
+      className="bg-neutral-100 p-5 rounded-md shadow-lg mt-4 text-lg flex justify-between"
     >
       <div>
         <p className="text-xl">{ticket.ticketClass}</p>
-        <p>Pris: 10 SEK</p>
+        <p>Pris: {ticket.price} SEK</p>
         <p>Försäljning: 213 st (2130 SEK)</p>
         <p>Biljetter kvar: 587/800</p>
       </div>
@@ -52,7 +51,7 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass }) {
           } bg-violet-200 text-sm shadow-2xl flex flex-col`}
         >
           <div
-            className="settings-box flex justify-between bg-violet-200 p-4"
+            className="settings-box flex justify-between bg-neutral-300 p-4"
             onClick={() => console.log("yiha")}
           >
             <p className="settings-box text-neutral-700">Ändra</p>
@@ -63,7 +62,10 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass }) {
               className="settings-box"
             />
           </div>
-          <div className="settings-box flex justify-between gap-2 bg-red-200 p-4" onClick={() => handleTrash()}>
+          <div
+            className="settings-box flex justify-between gap-2 bg-red-200 p-4"
+            onClick={() => handleTrash()}
+          >
             <p className="settings-box text-neutral-500">Ta bort</p>
             <Trash
               width={15}
@@ -77,7 +79,7 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass }) {
         <Dots
           width={35}
           height={35}
-          fill="#ddd6fe"
+          fill="#d57187"
           onClick={() => handleDotClick()}
           className={showSettings && "hidden"}
         />

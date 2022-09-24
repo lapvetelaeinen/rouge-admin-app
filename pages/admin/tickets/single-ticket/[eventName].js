@@ -49,7 +49,9 @@ export default function TicketsPage({ eventInfo }) {
   const deleteTicket = () => {
     const params = {
       eventName: eventInfo.eventName,
+      eventDate: eventInfo.eventDate,
       ticketClass: selectedTicketClass,
+      isLastTicket: allTickets.length === 1 ? "yes" : "no",
     };
 
     axios.post(
@@ -103,7 +105,7 @@ export default function TicketsPage({ eventInfo }) {
                   placeholder="Biljettklass"
                   name="ticketClass"
                   {...register("ticketClass")}
-                  className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                  className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm mt-4"
                 />
 
                 <input
@@ -111,7 +113,7 @@ export default function TicketsPage({ eventInfo }) {
                   placeholder="Pris"
                   name="price"
                   {...register("price")}
-                  className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                  className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
                 />
 
                 <input
@@ -119,12 +121,12 @@ export default function TicketsPage({ eventInfo }) {
                   placeholder="Antal"
                   name="maxAmount"
                   {...register("maxAmount")}
-                  className="p-4 bg-violet-300 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                  className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
                 />
 
                 <input
                   type="submit"
-                  className="p-4 bg-violet-600 placeholder-neutral-700 text-neutral-300 rounded-md shadow-sm"
+                  className="p-4 bg-[#d57187] placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
                   value="Skapa"
                 />
               </form>
@@ -155,7 +157,10 @@ export default function TicketsPage({ eventInfo }) {
                   Är du säker på att du vill radera denna biljettklass?
                 </p>
                 <div className="flex justify-center gap-8 pt-8 pb-4">
-                  <button className="border-2 border-neutral-500 rounded-md text-md text-neutral-700 py-3 px-6">
+                  <button
+                    className="border-2 border-neutral-500 rounded-md text-md text-neutral-700 py-3 px-6"
+                    onClick={() => setShowDeleteModal(false)}
+                  >
                     Behåll
                   </button>
                   <button
@@ -181,9 +186,12 @@ export default function TicketsPage({ eventInfo }) {
         />
       </div>
       <div className="px-3">
-        <div className="text-5xl text-center pt-5">{eventInfo.eventName}</div>
+        <div className="text-5xl text-center pt-5 text-violet-300">
+          {eventInfo.eventName.split("_")[0].replace("-", " ").toUpperCase()}
+        </div>
+        <p className="text-center text-neutral-500">{eventInfo.eventDate}</p>
         <button
-          className="bg-[#d57187] w-full p-5 text-xl rounded-lg"
+          className="bg-[#d57187] w-full p-5 text-xl rounded-lg mt-8 text-neutral-700"
           onClick={() => setShowModal(true)}
         >
           Ny biljett
