@@ -38,12 +38,15 @@ export default function TicketsPage({ eventInfo }) {
     };
 
     if (data) {
-      axios.post(
+      setIsLoading(true);
+      setShowModal(false);
+     await axios.post(
         "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/create-ticket",
         params
       );
+      setIsLoading(false);
+      getAllEvents();
       reset();
-      setIsLoading(true);
     } else {
       return;
     }
