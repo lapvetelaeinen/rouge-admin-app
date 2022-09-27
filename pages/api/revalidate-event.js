@@ -27,7 +27,7 @@ export default async function handler(req, res) {
 
     const slugToRevalidate = body.slugToRevalidate;
     if (slugToRevalidate) {
-      await res.revalidate(`/event/${slugToRevalidate}`);
+      await res.revalidate(`/admin/tickets/single-ticket/${slugToRevalidate}`);
       return res.json({ revalidated: true });
     }
   } catch (err) {
