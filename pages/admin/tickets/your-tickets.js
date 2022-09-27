@@ -79,6 +79,15 @@ export default function CreateTickets() {
         slugToRevalidate: params.eventName, // This is the body part
       },
     });
+
+    await axios({
+      method: "post",
+      url: "https://rouge-frontend.vercel.app/api/revalidate-event?secret=gkmn12714",
+      headers: {},
+      data: {
+        slugToRevalidate: params.eventName, // This is the body part
+      },
+    });
   };
 
   const onSubmit = async (data) => {
