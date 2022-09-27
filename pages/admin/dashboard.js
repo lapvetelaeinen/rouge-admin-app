@@ -27,7 +27,7 @@ export default function Dashboard() {
   const [dates, setDates] = useState([]);
   const [user, updateUser] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [allTickets, setAllTickets] = useState(null);
+  const [allEvents, setAllEvents] = useState(null);
   const [revenue, setRevenue] = useState(null);
   const [isLoading, setIsLoading] = useState();
 
@@ -40,44 +40,24 @@ export default function Dashboard() {
       .catch((err) => updateUser(null));
   }, []);
 
-  async function getTickets() {
-    const tickets = await axios.get(
-      "https://w8rzbuwc73.execute-api.eu-west-2.amazonaws.com/salesinfo/rouge-sales-info"
-    );
-    setAllTickets(tickets.data.Items);
 
-    let selectedTickets = [];
-    let totalRevenue = 0;
 
-    let date = selectedDate;
-    let newDate = date.toISOString().split("T")[0];
+  const getAllEvents = async () => {
+    if(!allEvents){
 
-    tickets.data.Items.map((ticket) => {
-      if (ticket.date === newDate && ticket.paymentStatus === "PAID") {
-        selectedTickets.push(ticket);
-        const paidAmount = parseInt(ticket.amount);
-        totalRevenue += paidAmount;
-        return;
-      }
+      const events = await axios
+      .get(
+        "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/get-events"
+      );
+      setAllEvents(events.data);
       return;
-    });
-    setAllTickets(selectedTickets);
-    setRevenue(totalRevenue);
-    setIsLoading(false);
-  }
+    }
+    console.log("We have events already")
+    console.log(allEvents);
+  };
 
-  useEffect(() => {
-    setIsLoading(true);
-    getTickets();
-  }, [selectedDate]);
+  getAllEvents();
 
-  // useEffect(() => {
-  //   let selectedTickets;
-
-  //   allTickets.map((ticket) => {
-  //     console.log(ticket.owner);
-  //   });
-  // }, [selectedDate]);
 
   console.log(dayjs().isoWeek());
 
@@ -86,41 +66,43 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="grid grid-cols-1 min-h-screen bg-orange-100">
-      <h1 className="text-4xl font-medium pl-2 pt-10">
+    <div className="grid grid-cols-1 min-h-screen bg-slate-800">
+      <h1 className="text-4xl text-neutral-300 font-medium pl-2 pt-10">
         Välkommen {user && capitalizeFirstLetter(user.username)}
       </h1>
       <div className="pt-10 pb-10">
-        <h2 className="text-2xl pl-2 pb-4">Vad vill du göra idag?</h2>
+        <h2 className="text-2xl pl-2 pb-4 text-neutral-500">Vad vill du göra idag?</h2>
         <div className={styles.mediaScroller}>
           <div
             className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1"
-            onClick={() => Router.push("/admin/dashboard")}
+            onClick={() => Router.push("/admin/tickets/your-tickets")}
           >
             <Add width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Skapa event</p>
           </div>
-          <div
+          {/* <div
             className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1"
             onClick={() => Router.push("/admin/dashboard")}
           >
             <Ticket width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Släppa biljetter</p>
-          </div>
+          </div> */}
           <div className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1">
             <Chat width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Skicka notis</p>
+            <p className="text-sm">Inte klart</p>
           </div>
           <div className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1">
             <Download width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Ladda ner rapport</p>
+            <p className="text-sm">Inte klart</p>
           </div>
         </div>
       </div>
 
-      <div className=" bg-orange-100 pb-10 px-4">
-        <h2 className="text-3xl text-neutral-800 text-center py-8">Schema</h2>
-        <TestCalendar />
+      <div className=" bg-slate-800 pb-10 px-4">
+        <h2 className="text-3xl text-neutral-500 text-center py-8">Schema (inte klart än)</h2>
+        <TestCalendar allEvents={allEvents}/>
       </div>
       <div className="text-center mb-8">
         <button

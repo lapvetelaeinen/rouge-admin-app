@@ -5,6 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import Times from "../../../../components/svg-components/Times";
 import TicketCard from "../../../../components/TicketCard";
+import Loader from "../../../../components/Loader";
 
 export default function TicketsPage({ eventInfo }) {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function TicketsPage({ eventInfo }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedTicketClass, setSelectedTicketClass] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const BUCKET_URL = "https://rouge-event-images.s3.eu-west-2.amazonaws.com/";
   const imagePath = BUCKET_URL + eventInfo.image;
@@ -31,6 +33,7 @@ export default function TicketsPage({ eventInfo }) {
       ticketClass: data.ticketClass,
       price: data.price,
       maxAmount: data.maxAmount,
+      sold: 0,
       isFirstTicket: allTickets.length > 0 ? "no" : "yes",
     };
 
@@ -40,27 +43,38 @@ export default function TicketsPage({ eventInfo }) {
         params
       );
       reset();
+      setIsLoading(true);
     } else {
       return;
     }
     router.reload(window.location.pathname);
   };
 
-  const deleteTicket = () => {
+  const deleteTicket = async () => {
     const params = {
       eventName: eventInfo.eventName,
       eventDate: eventInfo.eventDate,
       ticketClass: selectedTicketClass,
       isLastTicket: allTickets.length === 1 ? "yes" : "no",
     };
-
-    axios.post(
+    setIsLoading(true);
+    setShowDeleteModal(false);
+    await axios.post(
       "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/delete-ticket",
       params
     );
+    setIsLoading(false);
 
-    router.reload(window.location.pathname);
+    getAllEvents();
   };
+
+  const getAllEvents = async () => {
+    const tickets = await axios
+    .get(
+      `https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/get-tickets?eventName=${eventInfo.eventName}`
+    )
+    setAllTickets(tickets.data);
+  }
 
   useEffect(() => {
     if (!allTickets) {
@@ -78,8 +92,10 @@ export default function TicketsPage({ eventInfo }) {
 
   return (
     <div className="min-h-screen bg-slate-800 relative md:px-28 md:py-10">
+      {isLoading && <Loader/>}
       {showModal ? (
         <div className="">
+          
           <div
             className="bg-neutral-800 z-40 absolute h-full w-full flex justify-center items-center bg-opacity-80"
             onClick={() => setShowModal(false)}

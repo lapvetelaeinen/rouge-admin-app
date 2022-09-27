@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm } from "react-hook-form";
 import EventListTile from "../../../components/EventListTile";
+import Loader from "../../../components/Loader";
 import Times from "../../../components/svg-components/Times";
 import { useRouter } from "next/router";
 
@@ -13,22 +14,25 @@ export default function CreateTickets() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(null);
   const [file, setFile] = useState();
 
   const router = useRouter();
 
-  const deleteEvent = () => {
+  const deleteEvent = async () => {
     const params = {
       eventName: selectedEvent.eventName,
       eventDate: selectedEvent.eventDate,
     };
-
-    axios.post(
+    setIsLoading(true);
+    await axios.post(
       "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/delete-event",
       params
     );
+    setIsLoading(false);
+    setShowDeleteModal(false);
+    getAllEvents();
 
-    router.reload(window.location.pathname);
   };
 
   const {
@@ -37,6 +41,14 @@ export default function CreateTickets() {
     formState: { errors },
     handleSubmit,
   } = useForm();
+
+  const getAllEvents = async () => {
+    const events = await axios
+    .get(
+      "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/get-events"
+    );
+    setAllEvents(events.data);
+  }
 
   useEffect(() => {
     if (!allEvents) {
@@ -51,10 +63,13 @@ export default function CreateTickets() {
   });
 
   const addEvent = async (params) => {
+    setIsLoading(true);
     await axios.post(
       "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/create-event",
       params
     );
+    setIsLoading(false);
+    getAllEvents();
   };
 
   const onSubmit = async (data) => {
@@ -70,9 +85,7 @@ export default function CreateTickets() {
 
         const createNewEventInput = {
           eventName:
-            data.title.replace(/\s+/g, "-").toLowerCase() +
-            "_" +
-            selectedDate.toISOString().substring(0, 10),
+            data.title.replace(/\s+/g, "-").toLowerCase(),
           eventDate: selectedDate.toISOString().substring(0, 10),
           image: file.name,
           description: data.description,
@@ -86,6 +99,10 @@ export default function CreateTickets() {
         // });
 
         console.log("New event created successfully:", createNewEventInput);
+
+        reset();
+        setShowModal(false);
+        getAllEvents();
 
         // router.push(`/admin/dashboard`);
       } catch (error) {
@@ -139,6 +156,7 @@ export default function CreateTickets() {
   return (
     <>
       <div className="bg-slate-800 min-h-screen">
+        {isLoading && <Loader/>}
         {showModal ? (
           <div className="">
             <div
@@ -264,11 +282,11 @@ export default function CreateTickets() {
         ) : null}
         <div className="pt-14 pb-20">
           <h1 className="text-center text-4xl text-violet-300 font-bold">
-            Biljettsläpp
+            Biljettsläpp?
           </h1>
           <p className="text-center pt-6 px-4 text-neutral-500">
             Välj ett event från listan för att lägga till nya biljetter eller
-            för att uppdatera pris och antal på gamla biljetter.
+            klicka på knappen längst ned för att skapa nytt event.
           </p>
         </div>
         <p className="pl-4 pb-4 text-3xl font-bold text-violet-300">

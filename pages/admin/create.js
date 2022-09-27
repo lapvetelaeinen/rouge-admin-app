@@ -56,10 +56,7 @@ export default function Create() {
         // });
 
         const createNewEventInput = {
-          eventName:
-            data.title.replace(/\s+/g, "-").toLowerCase() +
-            "_" +
-            selectedDate.toISOString().substring(0, 10),
+          eventName: data.title.replace(/\s+/g, "-").toLowerCase(),
           eventDate: selectedDate.toISOString().substring(0, 10),
           image: file.name,
           description: data.description,

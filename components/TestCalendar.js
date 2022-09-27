@@ -9,10 +9,11 @@ dayjs.extend(dayOfYear);
 dayjs.extend(isoWeek);
 dayjs.extend(weekOfYear);
 
-function TestCalendar() {
+function TestCalendar({ allEvents }) {
   const router = useRouter();
   const [week, setWeek] = useState(dayjs().isoWeek());
   const [formatted, setFormatted] = useState(null);
+  const [events, setEvents] = useState(null);
 
   const daysOfTheWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -58,6 +59,8 @@ function TestCalendar() {
       );
     console.log(allDays);
 
+
+
     return allDays.map((day) => (
       <>
         <tr className="border-b-2 border-neutral-400">
@@ -77,6 +80,7 @@ function TestCalendar() {
               {day.getMonth() == 10 && "nov"}
               {day.getMonth() == 11 && "dec"}
             </p>
+            
           </td>
           <td
             suppressHydrationWarning={true}

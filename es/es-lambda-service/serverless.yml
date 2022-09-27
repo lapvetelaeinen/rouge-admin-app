@@ -1,0 +1,14 @@
+service: es-lambda-service
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-west-2
+  role: arn:aws:iam::513409742618:role/rouge-es-role
+
+functions:
+  es:
+    handler: handler.es
+

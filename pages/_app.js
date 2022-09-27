@@ -7,6 +7,9 @@ import "@aws-amplify/ui-react/styles.css";
 import awsmobile from "../src/aws-exports";
 import "../styles/globals.css";
 import { SelectedEventProvider } from "../contexts/SelectedEventContext";
+import Router from "next/router";
+import Loader from "../components/Loader";
+import { useState } from "react";
 
 Amplify.configure({ ...awsmobile, ssr: true });
 
@@ -20,11 +23,23 @@ function MyApp({
   if (isPassedToWithAuthenticator) {
     throw new Error(`isPassedToWithAuthenticator was not provided`);
   }
+
+  const [loading, setLoading] = useState(false);
+  Router.events.on("routeChangeStart", (url) => {
+    setLoading(true);
+    document.body.style.overflow = "hidden";
+  });
+  Router.events.on("routeChangeComplete", (url) => {
+    setLoading(false);
+    document.body.style.overflow = "auto";
+  });
+
   return (
     <SelectedEventProvider>
       <Layout>
+      {loading && <Loader />}
         <Component {...pageProps} />
-        <button onClick={signOut}>Sign out</button>
+
       </Layout>
     </SelectedEventProvider>
   );

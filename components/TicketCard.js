@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import Dots from "./svg-components/Dots";
 import Pen from "./svg-components/Pen";
@@ -5,6 +6,7 @@ import Trash from "./svg-components/Trash";
 
 export default function TicketCard({ ticket, toggle, setSelectedTicketClass }) {
   const [showSettings, setShowSettings] = useState(false);
+  const [salesInfo, setSalesInfo] = useState(null);
 
   let menuRef = useRef();
 
@@ -32,6 +34,22 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass }) {
     setSelectedTicketClass(ticket.ticketClass);
   };
 
+  const getSaleStats = async () => {
+    if (!salesInfo){
+      const params = {
+        eventName: ticket.eventName,
+        ticketClass: ticket.ticketClass
+      }
+      const saleInfo = await axios.post("https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/get-single-ticket-sale", params);
+      setSalesInfo(saleInfo.data);
+      console.log(saleInfo);
+      return;
+    }
+    console.log("we already have info: ", salesInfo);
+  };
+
+  getSaleStats();
+
   return (
     <div
       key={ticket.eventName}
@@ -39,9 +57,12 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass }) {
     >
       <div>
         <p className="text-xl">{ticket.ticketClass}</p>
-        <p>Pris: {ticket.price} SEK</p>
-        <p>Försäljning: 213 st (2130 SEK)</p>
-        <p>Biljetter kvar: 587/800</p>
+        {salesInfo ? <>
+          <p>Pris: {ticket.price} SEK</p>
+        <p>Försäljning: {salesInfo[0].sold} st ({salesInfo[0].sold * ticket.price} SEK)</p>
+        <p>Biljetter kvar: {salesInfo[0].maxAmount - salesInfo[0].sold}/{salesInfo[0].maxAmount}</p>
+        </> : null}
+
       </div>
       <div>
         <div
@@ -50,7 +71,7 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass }) {
             !showSettings && "hidden"
           } bg-violet-200 text-sm shadow-2xl flex flex-col`}
         >
-          <div
+          {/* <div
             className="settings-box flex justify-between bg-neutral-300 p-4"
             onClick={() => console.log("yiha")}
           >
@@ -61,7 +82,7 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass }) {
               fill="#404040"
               className="settings-box"
             />
-          </div>
+          </div> */}
           <div
             className="settings-box flex justify-between gap-2 bg-red-200 p-4"
             onClick={() => handleTrash()}
