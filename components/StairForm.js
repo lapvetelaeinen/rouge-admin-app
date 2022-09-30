@@ -139,6 +139,11 @@ export default function StairForm({
         </div>
         <div className="">
           <form onSubmit={handleSubmit((data) => onSubmit(data))}>
+            <div className="flex gap-2 items-center mb-4 text-xl">
+            <div className="flex-1">Pris</div>
+            <div className="flex-1 mr-4">Antal</div>
+
+            </div>
             <div className="">
               {newStair.map((item, index) => (
                 <div key={item.id} className="flex gap-2 items-center mb-4">
