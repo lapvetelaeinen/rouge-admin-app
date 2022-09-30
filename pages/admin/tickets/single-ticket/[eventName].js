@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import Image from "next/image";
 import Times from "../../../../components/svg-components/Times";
+import Plus from "../../../../components/svg-components/Plus";
+import StairForm from "../../../../components/StairForm";
+
 import TicketCard from "../../../../components/TicketCard";
 import Loader from "../../../../components/Loader";
 
@@ -12,7 +15,9 @@ export default function TicketsPage({ eventInfo }) {
   const [allTickets, setAllTickets] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showStairsModal, setShowStairsModal] = useState(false);
   const [selectedTicketClass, setSelectedTicketClass] = useState(null);
+  const [selectedStairTicket, setSelectedStairTicket] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,6 +32,16 @@ export default function TicketsPage({ eventInfo }) {
   } = useForm();
 
   const onSubmit = async (data) => {
+
+
+    const stair = [
+      {
+        amount: data.maxAmount,
+        price: data.price
+      },
+
+    ];
+
     const params = {
       eventName: eventInfo.eventName,
       eventDate: eventInfo.eventDate,
@@ -35,12 +50,13 @@ export default function TicketsPage({ eventInfo }) {
       maxAmount: data.maxAmount,
       sold: 0,
       isFirstTicket: allTickets.length > 0 ? "no" : "yes",
+      stair: JSON.stringify(stair)
     };
 
     if (data) {
       setIsLoading(true);
       setShowModal(false);
-     await axios.post(
+      await axios.post(
         "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/create-ticket",
         params
       );
@@ -50,7 +66,7 @@ export default function TicketsPage({ eventInfo }) {
     } else {
       return;
     }
-    router.reload(window.location.pathname);
+
   };
 
   const deleteTicket = async () => {
@@ -72,12 +88,11 @@ export default function TicketsPage({ eventInfo }) {
   };
 
   const getAllEvents = async () => {
-    const tickets = await axios
-    .get(
+    const tickets = await axios.get(
       `https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/get-tickets?eventName=${eventInfo.eventName}`
-    )
+    );
     setAllTickets(tickets.data);
-  }
+  };
 
   useEffect(() => {
     if (!allTickets) {
@@ -95,10 +110,9 @@ export default function TicketsPage({ eventInfo }) {
 
   return (
     <div className="min-h-screen bg-slate-800 relative md:px-28 md:py-10">
-      {isLoading && <Loader/>}
+      {isLoading && <Loader />}
       {showModal ? (
         <div className="">
-          
           <div
             className="bg-neutral-800 z-40 absolute h-full w-full flex justify-center items-center bg-opacity-80"
             onClick={() => setShowModal(false)}
@@ -117,14 +131,14 @@ export default function TicketsPage({ eventInfo }) {
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 autoComplete="off"
-                className="flex flex-col gap-3"
+                className="flex flex-col gap-3 items-center"
               >
                 <input
                   type="text"
                   placeholder="Biljettklass"
                   name="ticketClass"
                   {...register("ticketClass")}
-                  className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm mt-4"
+                  className="w-full p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm mt-4"
                 />
 
                 <input
@@ -132,7 +146,7 @@ export default function TicketsPage({ eventInfo }) {
                   placeholder="Pris"
                   name="price"
                   {...register("price")}
-                  className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                  className="w-full p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
                 />
 
                 <input
@@ -140,17 +154,29 @@ export default function TicketsPage({ eventInfo }) {
                   placeholder="Antal"
                   name="maxAmount"
                   {...register("maxAmount")}
-                  className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                  className="w-full p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
                 />
 
                 <input
                   type="submit"
-                  className="p-4 bg-[#d57187] placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                  className="w-full p-4 bg-[#d57187] placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
                   value="Skapa"
                 />
               </form>
             </div>
           </div>
+        </div>
+      ) : null}
+      {showStairsModal ? (
+        <div className="">
+          <div
+            className="bg-neutral-800 z-40 absolute h-full w-full flex justify-center items-center bg-opacity-80"
+            onClick={() => {
+              setShowStairsModal(false);
+              setSelectedStairTicket(null);
+            }}
+          ></div>
+          <StairForm ticket={selectedStairTicket} setShowStairsModal={() => setShowStairsModal(false)} getAllEvents={() => getAllEvents()}/>
         </div>
       ) : null}
 
@@ -218,6 +244,7 @@ export default function TicketsPage({ eventInfo }) {
         <div>
           {allTickets
             ? allTickets.map((ticket) => (
+              ticket.stair === "yes" ? null : 
                 <TicketCard
                   key={ticket.eventName}
                   ticket={ticket}
@@ -225,6 +252,10 @@ export default function TicketsPage({ eventInfo }) {
                   setSelectedTicketClass={(ticketClass) =>
                     setSelectedTicketClass(ticketClass)
                   }
+                  setSelectedStairTicket={(ticketClass) =>
+                    setSelectedStairTicket(ticketClass)
+                  }
+                  setShowStairsModal={() => setShowStairsModal(true)}
                 />
               ))
             : null}
