@@ -67,6 +67,7 @@ export default function StairForm({
 
     console.log("STAIR VALUES: ", stairValues);
     console.log("NEW STAIR: ", newStair);
+    console.log("THIS IS THE TICKET: ", ticket);
 
     const params = {
       eventName: ticket.eventName,
