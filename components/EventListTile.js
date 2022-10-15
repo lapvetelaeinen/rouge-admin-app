@@ -65,7 +65,7 @@ const EventListTile = ({ event, toggle, setSelectedEvent }) => {
               {event.eventName.split("_")[0].replace("-", " ").toUpperCase()}
             </p>
             <p>{event.eventDate}</p>
-            <p>126 biljetter sålda</p>
+
           </div>
         </div>
         <div>

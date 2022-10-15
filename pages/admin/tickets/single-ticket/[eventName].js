@@ -357,7 +357,7 @@ export default function TicketsPage({ eventInfo }) {
             ? allTickets.map((ticket) =>
                 ticket.stair === "yes" ? null : (
                   <TicketCard
-                    sales={salesReport}
+                    sales={salesReport ? salesReport : [{info: "Inga sålda biljetter"}]}
                     key={ticket.eventName}
                     ticket={ticket}
                     toggle={() => setShowDeleteModal(!showDeleteModal)}
