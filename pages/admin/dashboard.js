@@ -12,6 +12,7 @@ import SalesCard from "../../components/SalesCard";
 
 import styles from "../../styles/Dashboard.module.css";
 import Add from "../../components/svg-components/Add";
+import Dollar from "../../components/svg-components/Dollar";
 import Ticket from "../../components/svg-components/Ticket";
 import Chat from "../../components/svg-components/Chat";
 import Download from "../../components/svg-components/Download";
@@ -80,13 +81,14 @@ export default function Dashboard() {
             <Add width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Skapa event</p>
           </div>
-          {/* <div
+          <div
             className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1"
-            onClick={() => Router.push("/admin/dashboard")}
+            onClick={() => Router.push("/admin/sales")}
           >
-            <Ticket width="35px" height="35px" fill="rgb(38 38 38)" />
-            <p>Släppa biljetter</p>
-          </div> */}
+            <Dollar width="35px" height="35px" fill="rgb(38 38 38)" />
+            <p>Se försäljning</p>
+          </div>
+
           <div className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1">
             <Chat width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Skicka notis</p>

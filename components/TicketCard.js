@@ -5,13 +5,20 @@ import Pen from "./svg-components/Pen";
 import Plus from "./svg-components/Plus";
 import Trash from "./svg-components/Trash";
 
-export default function TicketCard({ ticket, toggle, setSelectedTicketClass, setShowStairsModal, setSelectedStairTicket }) {
+export default function TicketCard({ ticket, toggle, setSelectedTicketClass, setShowStairsModal, setSelectedStairTicket, sales }) {
   const [showSettings, setShowSettings] = useState(false);
   const [salesInfo, setSalesInfo] = useState(null);
 
   let menuRef = useRef();
 
   useEffect(() => {
+    sales.forEach((el) => {
+      if(el.ticketClass === ticket.ticketClass){
+        setSalesInfo(el);
+      }
+    });
+
+
     let handler = (event) => {
       if (!menuRef.current.contains(event.target)) {
         setShowSettings(false);
@@ -40,25 +47,6 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass, set
     setSelectedStairTicket(ticket);
   };
 
-  const getSaleStats = async () => {
-    if (!salesInfo) {
-      const params = {
-        eventName: ticket.eventName,
-        ticketClass: ticket.ticketClass,
-      };
-      const saleInfo = await axios.post(
-        "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/get-single-ticket-sale",
-        params
-      );
-      setSalesInfo(saleInfo.data);
-      console.log(saleInfo);
-      return;
-    }
-    console.log("we already have info: ", salesInfo);
-  };
-
-  getSaleStats();
-
   return (
     <div
       key={ticket.eventName}
@@ -70,13 +58,13 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass, set
           <>
             <p>Pris: {ticket.price} SEK</p>
             <p>
-              Försäljning: {salesInfo[0].sold} st (
-              {salesInfo[0].sold * ticket.price} SEK)
+              Försäljning: {salesInfo.soldTickets} st (
+              {salesInfo.revenue} SEK)
             </p>
-            <p>
+            {/* <p>
               Biljetter kvar: {salesInfo[0].maxAmount - salesInfo[0].sold}/
               {salesInfo[0].maxAmount}
-            </p>
+            </p> */}
           </>
         ) : null}
       </div>
@@ -123,7 +111,7 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass, set
           />
 
 
-        <div className="bg-neutral-300 p-2 rounded-xl shadow-xl" onClick={() => handleStairsClick()}>
+        <div className={`${showSettings ? "hidden" : ""} bg-neutral-300 p-2 rounded-xl shadow-xl`} onClick={() => handleStairsClick()}>
           <div className="flex">
             <div className="  border-black w-3 h-1"></div>
             <div className="border-r-4 border-black w-2 h-1"></div>

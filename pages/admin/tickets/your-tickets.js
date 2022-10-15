@@ -17,6 +17,7 @@ export default function CreateTickets() {
   const [isLoading, setIsLoading] = useState(null);
   const [file, setFile] = useState();
 
+
   const router = useRouter();
 
   const deleteEvent = async () => {
@@ -59,6 +60,7 @@ export default function CreateTickets() {
         .then((res) => setAllEvents(res.data));
       console.log("this is events: ", allEvents);
     }
+
     return;
   });
 
