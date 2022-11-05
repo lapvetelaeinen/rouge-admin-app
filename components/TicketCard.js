@@ -66,7 +66,17 @@ export default function TicketCard({ ticket, toggle, setSelectedTicketClass, set
               {salesInfo[0].maxAmount}
             </p> */}
           </>
-        ) : null}
+        ) :           <>
+        <p>Pris: {ticket.price} SEK</p>
+        <p>
+          Försäljning: 0 st (
+          0 SEK)
+        </p>
+        {/* <p>
+          Biljetter kvar: {salesInfo[0].maxAmount - salesInfo[0].sold}/
+          {salesInfo[0].maxAmount}
+        </p> */}
+      </>}
       </div>
       <div>
         <div
