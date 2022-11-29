@@ -17,7 +17,6 @@ export default function CreateTickets() {
   const [isLoading, setIsLoading] = useState(null);
   const [file, setFile] = useState();
 
-
   const router = useRouter();
 
   const deleteEvent = async () => {
@@ -33,7 +32,6 @@ export default function CreateTickets() {
     setIsLoading(false);
     setShowDeleteModal(false);
     getAllEvents();
-
   };
 
   const {
@@ -44,12 +42,11 @@ export default function CreateTickets() {
   } = useForm();
 
   const getAllEvents = async () => {
-    const events = await axios
-    .get(
+    const events = await axios.get(
       "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/get-events"
     );
     setAllEvents(events.data);
-  }
+  };
 
   useEffect(() => {
     if (!allEvents) {
@@ -103,9 +100,17 @@ export default function CreateTickets() {
         //   contentType: file.type, // contentType is optional
         // });
 
+        const removedSpaces = data.title.replace(/\s+/g, "-").toLowerCase();
+        const eventName = removedSpaces
+          .replace(/å/g, "_aa_")
+          .replace(/Å/g, "_AA_")
+          .replace(/ä/g, "_ae_")
+          .replace(/Ä/g, "_AE_")
+          .replace(/ö/g, "_oe_")
+          .replace(/Ö/g, "_OE_");
+
         const createNewEventInput = {
-          eventName:
-            data.title.replace(/\s+/g, "-").toLowerCase(),
+          eventName: eventName,
           eventDate: selectedDate.toISOString().substring(0, 10),
           image: file.name,
           description: data.description,
@@ -176,7 +181,7 @@ export default function CreateTickets() {
   return (
     <>
       <div className="bg-slate-800 min-h-screen">
-        {isLoading && <Loader/>}
+        {isLoading && <Loader />}
         {showModal ? (
           <div className="">
             <div

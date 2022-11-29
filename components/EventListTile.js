@@ -44,6 +44,12 @@ const EventListTile = ({ event, toggle, setSelectedEvent }) => {
     };
   });
 
+  const eventName = event.eventName.replace(/-/g, " ").toUpperCase();
+  const formattedName = eventName          .replace(/å/g, "_aa_")
+  .replace(/_AA_/g, "Å")
+  .replace(/_AE_/g, "Ä")
+  .replace(/_OE_/g, "Ö");
+
   return (
     <div
       className="w-full px-2"
@@ -62,7 +68,7 @@ const EventListTile = ({ event, toggle, setSelectedEvent }) => {
           />
           <div className="flex flex-col text-md justify-center pl-5 text-neutral-500">
             <p className="text-neutral-700">
-              {event.eventName.split("_")[0].replace("-", " ").toUpperCase()}
+              {formattedName}
             </p>
             <p>{event.eventDate}</p>
 
