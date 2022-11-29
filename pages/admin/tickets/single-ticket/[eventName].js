@@ -32,6 +32,12 @@ export default function TicketsPage({ eventInfo }) {
   const selectOptions = [
   ];
 
+  const eventName = eventInfo.eventName.replace(/-/g, " ").toUpperCase();
+  const formattedName = eventName          
+  .replace(/_AA_/g, "Å")
+  .replace(/_AE_/g, "Ä")
+  .replace(/_OE_/g, "Ö");
+
   const registerOptions = {
     // ...
     role: { required: "Role is required" },
@@ -343,7 +349,7 @@ export default function TicketsPage({ eventInfo }) {
       </div>
       <div className="px-3">
         <div className="text-5xl text-center pt-5 text-violet-300">
-          {eventInfo.eventName.split("_")[0].replace("-", " ").toUpperCase()}
+          {formattedName}
         </div>
         <p className="text-center text-neutral-500">{eventInfo.eventDate}</p>
         <button
