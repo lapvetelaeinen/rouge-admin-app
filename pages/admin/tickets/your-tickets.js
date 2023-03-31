@@ -81,7 +81,7 @@ export default function CreateTickets() {
 
     await axios({
       method: "post",
-      url: "https://rouge-frontend.vercel.app/api/revalidate-event?secret=gkmn12714",
+      url: "https://rouge-site.vercel.app/api/revalidate-event?secret=gkmn12714",
       headers: {},
       data: {
         slugToRevalidate: params.eventName, // This is the body part

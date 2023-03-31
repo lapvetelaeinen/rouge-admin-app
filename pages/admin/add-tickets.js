@@ -59,7 +59,7 @@ export default function AddTickets() {
 
     await axios({
       method: "post",
-      url: "https://rouge-frontend.vercel.app/api/revalidate-event?secret=gkmn12714",
+      url: "https://rouge-site.vercel.app/api/revalidate-event?secret=gkmn12714",
       headers: {},
       data: {
         slugToRevalidate: selectedEvent.eventId, // This is the body part
@@ -80,7 +80,7 @@ export default function AddTickets() {
 
     await axios({
       method: "post",
-      url: "https://rouge-frontend.vercel.app/api/revalidate-event?secret=gkmn12714",
+      url: "https://rouge-site.vercel.app/api/revalidate-event?secret=gkmn12714",
       headers: {},
       data: {
         slugToRevalidate: selectedEvent.eventId, // This is the body part
