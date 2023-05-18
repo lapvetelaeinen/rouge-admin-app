@@ -181,164 +181,166 @@ export default function CreateTickets() {
   return (
     <>
       <div className="bg-slate-800 min-h-screen">
-        {isLoading && <Loader />}
-        {showModal ? (
-          <div className="">
-            <div
-              className="bg-neutral-800 z-40 absolute h-full w-full flex justify-center items-center bg-opacity-80"
-              onClick={() => setShowModal(false)}
-            ></div>
-            <div className="absolute bg-neutral-200 z-50 w-full min-h-[300px rounded-3xl p-4 mt-40">
-              <div className="flex flex-col">
-                <div className="flex justify-between p-1">
-                  <p></p>
-                  <Times
-                    width={50}
-                    height={50}
-                    fill="#f57971"
-                    onClick={() => setShowModal(!showModal)}
-                  />
-                </div>
-                <form
-                  onSubmit={handleSubmit(onSubmit)}
-                  autoComplete="off"
-                  className="flex flex-col gap-3"
-                >
-                  <input
-                    type="text"
-                    placeholder="Titel"
-                    name="title"
-                    {...register("title")}
-                    className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
-                  />
-
-                  <DatePicker
-                    className="bg-neutral-100 rounded-md p-4 text-neutral-700 shadow-sm w-full"
-                    selected={selectedDate}
-                    onChange={(date) => setSelectedDate(date)}
-                  />
-
-                  <input
-                    type="text"
-                    placeholder="Beskrivning"
-                    name="description"
-                    {...register("description")}
-                    className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
-                  />
-
-                  <div className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm">
-                    <p>Ladda upp en bild</p>
-                    <input type="file" onChange={(e) => selectFile(e)} />
+        <div className="flex flex-col items-center md:pb-12">
+          {isLoading && <Loader />}
+          {showModal ? (
+            <div className="flex justify-center">
+              <div
+                className="bg-neutral-800 z-40 absolute h-full w-full flex justify-center items-center bg-opacity-80"
+                onClick={() => setShowModal(false)}
+              ></div>
+              <div className="absolute bg-neutral-200 z-50 md:w-[500px] min-h-[300px rounded-3xl p-4 mt-40">
+                <div className="flex flex-col">
+                  <div className="flex justify-between p-1">
+                    <p></p>
+                    <Times
+                      width={50}
+                      height={50}
+                      fill="#f57971"
+                      onClick={() => setShowModal(!showModal)}
+                    />
                   </div>
+                  <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    autoComplete="off"
+                    className="flex flex-col gap-3"
+                  >
+                    <input
+                      type="text"
+                      placeholder="Titel"
+                      name="title"
+                      {...register("title")}
+                      className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                    />
 
-                  <input
-                    type="hidden"
-                    placeholder="Biljettklass"
-                    name="ticketclass"
-                    {...register("ticketclass")}
-                    className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
-                  />
+                    <DatePicker
+                      className="bg-neutral-100 rounded-md p-4 text-neutral-700 shadow-sm w-full"
+                      selected={selectedDate}
+                      onChange={(date) => setSelectedDate(date)}
+                    />
 
-                  <input
-                    type="hidden"
-                    placeholder="Pris"
-                    name="price"
-                    {...register("price")}
-                    className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
-                  />
+                    <input
+                      type="text"
+                      placeholder="Beskrivning"
+                      name="description"
+                      {...register("description")}
+                      className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                    />
 
-                  <input
-                    type="hidden"
-                    placeholder="Antal"
-                    name="amount"
-                    {...register("amount")}
-                    className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
-                  />
+                    <div className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm">
+                      <p>Ladda upp en bild</p>
+                      <input type="file" onChange={(e) => selectFile(e)} />
+                    </div>
 
-                  <input
-                    type="submit"
-                    className="p-4 bg-[#d57187] placeholder-neutral-700 text-neutral-700 rounded-md shadow-sm"
-                    value="Skapa"
-                  />
-                </form>
-              </div>
-            </div>
-          </div>
-        ) : null}
-        {showDeleteModal ? (
-          <div className="">
-            <div
-              className="bg-neutral-800 z-40 absolute h-full w-full flex justify-center items-center bg-opacity-80"
-              onClick={() => setShowDeleteModal(false)}
-            ></div>
-            <div className="absolute bg-neutral-200 z-50 w-full min-h-[300px rounded-3xl p-4 mt-40">
-              <div className="flex flex-col">
-                <div className="flex justify-between p-1">
-                  <p></p>
-                  <Times
-                    width={50}
-                    height={50}
-                    fill="#f57971"
-                    onClick={() => setShowDeleteModal(!showDeleteModal)}
-                  />
-                </div>
-                <div className="px-10">
-                  <p className="text-xl text-center pt-4">
-                    Är du säker på att du vill radera detta event?
-                  </p>
-                  <div className="flex justify-center gap-8 pt-8 pb-4">
-                    <button
-                      className="border-2 border-neutral-500 rounded-md text-md text-neutral-700 py-3 px-6"
-                      onClick={() => setShowDeleteModal(false)}
-                    >
-                      Behåll
-                    </button>
-                    <button
-                      className="bg-red-400 shadow-md rounded-md text-md py-3 px-6"
-                      onClick={(e) => deleteEvent(e)}
-                    >
-                      Radera
-                    </button>
-                  </div>
+                    <input
+                      type="hidden"
+                      placeholder="Biljettklass"
+                      name="ticketclass"
+                      {...register("ticketclass")}
+                      className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                    />
+
+                    <input
+                      type="hidden"
+                      placeholder="Pris"
+                      name="price"
+                      {...register("price")}
+                      className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                    />
+
+                    <input
+                      type="hidden"
+                      placeholder="Antal"
+                      name="amount"
+                      {...register("amount")}
+                      className="p-4 bg-neutral-100 placeholder-neutral-700 text-neutral-900 rounded-md shadow-sm"
+                    />
+
+                    <input
+                      type="submit"
+                      className="p-4 bg-[#d57187] placeholder-neutral-700 text-neutral-700 rounded-md shadow-sm"
+                      value="Skapa"
+                    />
+                  </form>
                 </div>
               </div>
             </div>
+          ) : null}
+          {showDeleteModal ? (
+            <div className="flex justify-center">
+              <div
+                className="bg-neutral-800 z-40 absolute h-full w-full flex justify-center items-center bg-opacity-80"
+                onClick={() => setShowDeleteModal(false)}
+              ></div>
+              <div className="absolute md:w-[500px] bg-neutral-200 z-50 w-full min-h-[300px rounded-3xl p-4 mt-40">
+                <div className="flex flex-col">
+                  <div className="flex justify-between p-1">
+                    <p></p>
+                    <Times
+                      width={50}
+                      height={50}
+                      fill="#f57971"
+                      onClick={() => setShowDeleteModal(!showDeleteModal)}
+                    />
+                  </div>
+                  <div className="px-10">
+                    <p className="text-xl text-center pt-4">
+                      Är du säker på att du vill radera detta event?
+                    </p>
+                    <div className="flex justify-center gap-8 pt-8 pb-4">
+                      <button
+                        className="border-2 border-neutral-500 rounded-md text-md text-neutral-700 py-3 px-6"
+                        onClick={() => setShowDeleteModal(false)}
+                      >
+                        Behåll
+                      </button>
+                      <button
+                        className="bg-red-400 shadow-md rounded-md text-md py-3 px-6"
+                        onClick={(e) => deleteEvent(e)}
+                      >
+                        Radera
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
+          <div className="pt-14 pb-20">
+            <h1 className="text-center text-4xl text-violet-300 font-bold">
+              Biljettsläpp?
+            </h1>
+            <p className="text-center pt-6 px-4 text-neutral-500">
+              Välj ett event från listan för att lägga till nya biljetter eller
+              klicka på knappen längst ned för att skapa nytt event.
+            </p>
           </div>
-        ) : null}
-        <div className="pt-14 pb-20">
-          <h1 className="text-center text-4xl text-violet-300 font-bold">
-            Biljettsläpp?
-          </h1>
-          <p className="text-center pt-6 px-4 text-neutral-500">
-            Välj ett event från listan för att lägga till nya biljetter eller
-            klicka på knappen längst ned för att skapa nytt event.
+          <p className="pl-4 pb-4 text-3xl font-bold text-violet-300">
+            Dina events
           </p>
-        </div>
-        <p className="pl-4 pb-4 text-3xl font-bold text-violet-300">
-          Dina events
-        </p>
-        <div className="flex flex-col gap-4">
-          {allEvents
-            ? allEvents.map((event) => (
-                <div key={event.eventName}>
-                  <EventListTile
-                    key={event.eventName}
-                    id={event.eventName}
-                    event={event}
-                    toggle={() => setShowDeleteModal(!showDeleteModal)}
-                    setSelectedEvent={(e) => setSelectedEvent(e)}
-                  />
-                </div>
-              ))
-            : null}
-        </div>
-        <div className="px-2">
-          <button
-            className="bg-[#d57187] w-full p-5 text-xl rounded-lg mt-8 text-neutral-700"
-            onClick={() => setShowModal(true)}
-          >
-            Nytt event
-          </button>
+          <div className="flex flex-col gap-4 md:w-[600px]">
+            {allEvents
+              ? allEvents.map((event) => (
+                  <div key={event.eventName}>
+                    <EventListTile
+                      key={event.eventName}
+                      id={event.eventName}
+                      event={event}
+                      toggle={() => setShowDeleteModal(!showDeleteModal)}
+                      setSelectedEvent={(e) => setSelectedEvent(e)}
+                    />
+                  </div>
+                ))
+              : null}
+          </div>
+          <div className="px-2">
+            <button
+              className="bg-[#d57187] w-full p-5 text-xl rounded-lg mt-8 text-neutral-700"
+              onClick={() => setShowModal(true)}
+            >
+              Nytt event
+            </button>
+          </div>
         </div>
       </div>
     </>

@@ -11,7 +11,7 @@ function Nav() {
 
   return (
     <>
-      <div className="bg-violet-300 flex justify-between items-center py-3 px-4">
+      <div className="bg-gradient-to-br from-pink-500 to-violet-800 flex justify-between items-center py-3 px-4">
         {isOpen ? (
           <Times
             fill="black"
@@ -29,26 +29,21 @@ function Nav() {
         )}
       </div>
       {isOpen ? (
-        <div className="bg-violet-200 h-[100vh]">
-          <ul className="flex flex-col font-appareo text-2xl text-neutral-800 pl-4">
+        <div className="bg-gradient-to-t from-neutral-800 to-pink-400 h-[100vh]">
+          <ul className="flex flex-col items-center font-appareo text-4xl text-neutral-800">
             <Link href="/">
-              <a href="" onClick={() => setIsOpen(!isOpen)} className="p-2">
+              <a href="" onClick={() => setIsOpen(!isOpen)} className="py-6">
                 Dashboard
               </a>
             </Link>
-            <Link href="/admin/create">
-              <a href="" onClick={() => setIsOpen(!isOpen)} className="p-2">
-                Skapa event
+            <Link href="/admin/tickets/your-tickets">
+              <a href="" onClick={() => setIsOpen(!isOpen)} className="py-6">
+                Events
               </a>
             </Link>
-            <Link href="/admin/add-tickets">
-              <a href="" onClick={() => setIsOpen(!isOpen)} className="p-2">
-                Biljettsläpp
-              </a>
-            </Link>
-            <Link href="/">
-              <a href="" onClick={() => setIsOpen(!isOpen)} className="p-2">
-                Statistik
+            <Link href="/admin/cards">
+              <a href="" onClick={() => setIsOpen(!isOpen)} className="py-6">
+                Medlemskort
               </a>
             </Link>
           </ul>
