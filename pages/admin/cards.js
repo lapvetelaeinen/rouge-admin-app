@@ -158,9 +158,7 @@ export default function CardsPage() {
               </form>
             )}
           </div>
-          <button className="p-4 bg-teal-300" onClick={activateCard}>
-            Activate
-          </button>
+
           <div className="bg-gradient-to-t from-pink-900 to-slate-900 w-full flex flex-col gap-6 justify-start items-center pt-12 pb-24">
             <p className="md:text-5xl text-4xl text-neutral-300 mt-12 mb-8">
               Dina kort
