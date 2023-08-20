@@ -37,9 +37,8 @@ function MyApp({
   return (
     <SelectedEventProvider>
       <Layout>
-      {loading && <Loader />}
+        {loading && <Loader />}
         <Component {...pageProps} />
-
       </Layout>
     </SelectedEventProvider>
   );

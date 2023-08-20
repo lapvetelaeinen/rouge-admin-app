@@ -1,24 +1,16 @@
 import React, { useEffect, useState } from "react";
-
 import Router from "next/router";
 import axios from "axios";
-import TestCalendar from "../../components/TestCalendar";
 import dayjs from "dayjs";
 import dayOfYear from "dayjs/plugin/dayOfYear";
 import isoWeek from "dayjs/plugin/isoWeek";
-
-import FilterButton from "../../components/FilterButton";
-import SalesCard from "../../components/SalesCard";
-
 import styles from "../../styles/Dashboard.module.css";
 import Add from "../../components/svg-components/Add";
 import Dollar from "../../components/svg-components/Dollar";
 import Ticket from "../../components/svg-components/Ticket";
+import MemberCard from "../../components/svg-components/MemberCard";
 import Chat from "../../components/svg-components/Chat";
-import Download from "../../components/svg-components/Download";
 import { Auth } from "aws-amplify";
-import { Amplify } from "aws-amplify";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 dayjs.extend(dayOfYear);
@@ -73,16 +65,22 @@ export default function Dashboard() {
         <div className={styles.mediaScroller}>
           <div
             className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1"
-            onClick={() => Router.push("/admin/tickets/your-tickets")}
+            onClick={() => Router.push("/admin/create-event")}
           >
             <Add width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Skapa event</p>
           </div>
+
           <div
             className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1"
-            onClick={() => Router.push("/admin/cards")}
+            onClick={() => Router.push("/admin/add-tickets")}
           >
             <Ticket width="35px" height="35px" fill="rgb(38 38 38)" />
+            <p>Släpp biljetter</p>
+          </div>
+
+          <div className="text-center flex flex-col justify-center items-center bg-neutral-100 opacity-20 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1">
+            <MemberCard width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Medlemskort</p>
           </div>
           <div className="text-center flex flex-col justify-center items-center bg-neutral-100 opacity-20 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1">

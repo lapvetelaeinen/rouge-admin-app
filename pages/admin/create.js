@@ -92,7 +92,7 @@ export default function Create() {
     }
   };
 
-  // Image upload below
+  // Image upload bellow
 
   const selectFile = (e) => {
     setFile(e.target.files[0]);

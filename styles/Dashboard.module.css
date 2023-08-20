@@ -1,4 +1,4 @@
-.mediaScroller {
+/* .mediaScroller {
   padding: 16px 8px 40px 8px;
   display: grid;
   grid-auto-flow: column;
@@ -33,4 +33,4 @@
     overscroll-behavior-inline: contain;
     scroll-snap-type: inline mandatory;
   }
-}
+} */
