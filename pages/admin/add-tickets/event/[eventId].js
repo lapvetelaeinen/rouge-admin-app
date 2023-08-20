@@ -80,7 +80,7 @@ export default function CreateTickets() {
       url: "https://rouge-site.vercel.app/api/revalidate-event?secret=gkmn12714",
       headers: {},
       data: {
-        slugToRevalidate: params.eventName, // This is the body parrt
+        slugToRevalidate: params.eventName, // This is the body part
       },
     });
   };
