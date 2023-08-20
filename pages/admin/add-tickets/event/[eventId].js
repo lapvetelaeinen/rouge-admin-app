@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm } from "react-hook-form";
-import EventListTile from "../../components/EventListTile";
-import Loader from "../../components/Loader";
-import Times from "../../components/svg-components/Times";
 import { useRouter } from "next/router";
 
 export default function CreateTickets() {

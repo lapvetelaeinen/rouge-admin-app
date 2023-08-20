@@ -3,7 +3,7 @@ import RougeButton from "./RougeButton";
 import Image from "next/image";
 import Router from "next/router";
 import ImageIcon from "./svg-components/Image";
-import TempImage from "./tempImage";
+import TempImage from "./TempImage";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
