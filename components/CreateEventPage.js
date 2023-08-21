@@ -149,7 +149,7 @@ export default function CreateEventPage({ toggleActive }) {
             className="py-4 pl-4 text-2xl bg-neutral-100 shadow-inner"
             type="text"
             placeholder="Info"
-            {...register("info", { maxLength: 100 })}
+            {...register("info")}
           />
 
           <DatePicker
