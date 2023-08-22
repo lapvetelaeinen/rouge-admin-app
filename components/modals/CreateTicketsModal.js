@@ -43,6 +43,8 @@ export default function CreateTicketsModal({ goBack, eventId }) {
 
     const msg = await lambdaResponse.json();
 
+    await fetch(`/api/trigger-revalidation?path=/event/${eventId}`);
+
     console.log("Message: ", msg);
 
     reset();

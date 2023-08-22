@@ -2,11 +2,14 @@ import fetch from "node-fetch";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req, res) => {
-  const body = JSON.parse(req.body);
+  const path = req.query.path;
 
-  console.log("BODY: ", body);
+  const revalidationRes = await fetch(
+    `https://rougeumea.se/api/revalidate?secret=Rouge_Umea2021!&path=${path}`
+  );
+  const revalMessage = await revalidationRes.json();
 
-  const message = "Hejj";
+  console.log("Server response: ", revalMessage);
 
-  res.status(200).json(message);
+  res.status(200).json(revalMessage);
 };
