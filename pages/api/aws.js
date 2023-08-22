@@ -28,7 +28,7 @@ export default async (req, res) => {
 
     const revalidationPayload = ["/", "/events"];
 
-    const validateRes1 = await fetch(
+    const validateRes = await fetch(
       `https://rougeumea.se/api/revalidate?secret=Rouge_Umea2021!`,
       {
         method: "POST",
@@ -39,9 +39,9 @@ export default async (req, res) => {
       }
     );
 
-    const validateMsg1 = await validateRes1.json();
+    const validateMsg = await validateRes.json();
 
-    console.log("VALIDATION1: ", validateMsg1);
+    console.log("VALIDATION: ", validateMsg);
   }
 
   if (body.type === "editEvent") {
