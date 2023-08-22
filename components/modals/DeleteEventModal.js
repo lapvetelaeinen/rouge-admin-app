@@ -43,7 +43,7 @@ export default function DeleteEventModal({
 
   useEffect(() => {
     if (isAskToDeleteActive) {
-      //check for clicks outside
+      //check for clicks outside element
       const targetDiv = document.getElementById("deleteBox");
       const button1 = document.getElementById("button1");
       const button2 = document.getElementById("button2");
