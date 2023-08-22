@@ -6,7 +6,7 @@ export default async (req, res) => {
 
   console.log("BODY: ", body);
 
-  const message = "Hej";
+  const message = "Hejj";
 
   res.status(200).json(message);
 };
