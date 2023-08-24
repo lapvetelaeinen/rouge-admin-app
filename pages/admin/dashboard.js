@@ -79,13 +79,16 @@ export default function Dashboard() {
             <p>Släpp biljetter</p>
           </div>
 
+          <div
+            onClick={() => Router.push("/admin/sales")}
+            className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1"
+          >
+            <Dollar width="35px" height="35px" fill="rgb(38 38 38)" />
+            <p>Se försäljning</p>
+          </div>
           <div className="text-center flex flex-col justify-center items-center bg-neutral-100 opacity-20 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1">
             <MemberCard width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Medlemskort</p>
-          </div>
-          <div className="text-center flex flex-col justify-center items-center bg-neutral-100 opacity-20 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1">
-            <Dollar width="35px" height="35px" fill="rgb(38 38 38)" />
-            <p>Se försäljning</p>
           </div>
 
           <div className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 opacity-20 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1">

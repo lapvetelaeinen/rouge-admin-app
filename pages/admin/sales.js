@@ -1,128 +1,113 @@
 import { useRouter } from "next/router";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
-import axios from "axios";
-import Times from "../../components/svg-components/Times";
-import Select from "react-select";
-import { EKS } from "aws-sdk";
+import { niceDate } from "../../lib/nice-date";
 
 export default function Sales() {
-  const router = useRouter();
-  const [allEvents, setAllEvents] = useState(null);
-  const [sales, setSales] = useState();
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [swishSales, setSwishSales] = useState(null);
+  const [stripeSales, setStripeSales] = useState(null);
+  const [payMethod, setPayMethod] = useState("SWISH");
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    control,
-  } = useForm();
-
-  const onSubmit = async (data) => {
-    console.log(data);
-  };
-
-  const selectOptions = [{ value: "lala", label: "lala" }];
-
-
-  
-  const handleChange = async (selectedOption) => {
-    setSelectedEvent(selectedOption.value);
-
-    const params = {
-      eventName: "test"
-    };
-
-    await axios
-    .post(
-      "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/get-event-sales-report", params
-    )
-    .then((res) => {
-        const salesReport = res.data;
-        setSales(salesReport);
+  const getAllSales = async () => {
+    const res = await fetch("/api/aws", {
+      method: "POST",
+      body: JSON.stringify({ type: "getAllSales" }),
     });
 
-  }
+    const data = await res.json();
+
+    setSwishSales(data.swish);
+    setStripeSales(data.stripe);
+  };
 
   useEffect(() => {
-    let fetchedEvents;
-
-    const getSales = async () => {
-  
-      const params = {
-        eventName: "test"
-      };
-  
-      await axios
-      .post(
-        "https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/get-event-sales-report", params
-      )
-      .then((res) => {
-          const salesReport = res.data;
-          setSales(salesReport);
-      });
-  
-    }
-    
-    if (!allEvents) {
-      axios
-        .get(
-          `https://47yon8pxx3.execute-api.eu-west-2.amazonaws.com/rouge-api/get-events`
-        )
-        .then((res) => {
-            let allEventsArr = []
-            res.data.forEach((el) => {
-                allEventsArr.push({value: el.eventName, label: el.eventName});
-            });
-            setAllEvents(allEventsArr);
-        });
-
-        getSales();
-        return;
-    }
-    if (allEvents) {
-      return;
-    }
-    return;
-  });
+    getAllSales();
+  }, []);
 
   return (
     <div className="min-h-screen w-full bg-neutral-100 px-4">
-      <div className="pt-14 pb-20">
+      <div className="pt-14 pb-16">
         <h1 className="text-4xl text-center text-neutral-700 font-bold">
-          Ha koll på er försäljning
+          Försäljning per dag
         </h1>
-
-      {/* <Controller
-        name="role"
-        control={control}
-        defaultValue=""
-        render={({ field }) => (
-          <Select
-            options={
-              allEvents ? allEvents : selectOptions
-            }
-            placeholder="Välj event..."
-            onChange={handleChange}
-          />
-        )}
-      />
-      <small className="text-danger">
-        {errors?.role && errors.role.message}
-      </small> */}
+        <div className="w-full flex justify-center mt-12">
+          <div className="bg-neutral-300 relative flex text-xl gap-2 rounded-full p-1 shadow-xl">
+            <button
+              onClick={() => setPayMethod("SWISH")}
+              className={`${
+                payMethod === "SWISH"
+                  ? "bg-gradient-to-l from-neutral-200 to-neutral-100 shadow-inner drop-shadow-md"
+                  : ""
+              } py-4 px-12 rounded-full`}
+            >
+              Swish
+            </button>
+            <button
+              onClick={() => setPayMethod("STRIPE")}
+              className={`${
+                payMethod === "STRIPE"
+                  ? "bg-gradient-to-l from-neutral-200 to-neutral-100 shadow-inner drop-shadow-md"
+                  : ""
+              } py-4 px-12 rounded-full`}
+            >
+              Kort
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="grid md:grid-cols-3 gap-4">
-        {sales ? sales.map(el => <div key={el.eventName + el.ticketClass} className="p-4 bg-neutral-300">
-        <p className="">{el.eventName}</p>
-        <p>{el.ticketClass}</p>
-        <p>{el.soldTickets} ST</p>
-        <p>{el.revenue} SEK</p>
-        </div>) : "Laddar..."}
-      </div>
+      {payMethod === "SWISH" ? (
+        <div className="mb-16">
+          {swishSales ? (
+            swishSales.map((item, index) => (
+              <div
+                className={`bg-gradient-to-tl ${
+                  item.ticketClass === "Rouge som kårhus"
+                    ? "from-blue-300 to-blue-100"
+                    : item.ticketClass === "Sponsrad"
+                    ? "from-green-300 to-green-100"
+                    : "from-purple-300 to-purple-100"
+                } shadow-inner mt-6 p-4 rounded-xl`}
+                key={index}
+              >
+                <p className="mb-2 italic">{niceDate(item.yearMonthDay)}</p>
+                <div className="bg-neutral-400 h-[1px] w-full"></div>
+                <p className="text-neutral-800 text-xl mt-2">Biljettklass</p>
+                <p className="text-lg text-neutral-700">{item.ticketClass}</p>
+                <p className="text-neutral-800 text-xl">Försäljning</p>
+                <p className="text-lg text-neutral-700">{`${item.sold} st (${item.revenue} SEK)`}</p>
+              </div>
+            ))
+          ) : (
+            <div>Laddar...</div>
+          )}
+        </div>
+      ) : (
+        <div className="mb-16">
+          {stripeSales ? (
+            stripeSales.map((item, index) => (
+              <div
+                className={`bg-gradient-to-tl ${
+                  item.ticketClass === "Rouge som kårhus"
+                    ? "from-blue-300 to-blue-100"
+                    : item.ticketClass === "Sponsrad"
+                    ? "from-green-300 to-green-100"
+                    : "from-purple-300 to-purple-100"
+                } shadow-inner mt-6 p-4 rounded-xl`}
+                key={index}
+              >
+                <p className="mb-2 italic">{niceDate(item.yearMonthDay)}</p>
+                <div className="bg-neutral-400 h-[1px] w-full"></div>
+                <p className="text-neutral-800 text-xl mt-2">Biljettklass</p>
+                <p className="text-lg text-neutral-700">{item.ticketClass}</p>
+                <p className="text-neutral-800 text-xl">Försäljning</p>
+                <p className="text-lg text-neutral-700">{`${item.sold} st (${item.revenue} SEK)`}</p>
+              </div>
+            ))
+          ) : (
+            <div>Laddar...</div>
+          )}
+        </div>
+      )}
+      <div className=""></div>
     </div>
   );
 }

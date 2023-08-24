@@ -27,6 +27,23 @@ export default async (req, res) => {
     message = msg;
   }
 
+  if (body.type === "getAllSales") {
+    console.log("Call amazon");
+    console.log(event);
+    const res = await fetch(
+      "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+      {
+        method: "POST",
+        body: JSON.stringify({ type: "getAllSales" }),
+      }
+    );
+
+    const msg = await res.json();
+    console.log("message from lambda: ", msg);
+
+    message = msg;
+  }
+
   if (body.type === "editEvent") {
     console.log("Call amazon");
     console.log(event);
