@@ -4,6 +4,8 @@ import fetch from "node-fetch";
 export default async (req, res) => {
   const path = req.query.path;
 
+  console.log("THIS IS THE PATH: ", path);
+
   const revalidationRes = await fetch(
     `https://rougeumea.se/api/revalidate?secret=Rouge_Umea2021!&path=${path}`
   );

@@ -6,13 +6,21 @@ import AddPriceLevelComponent from "../../../../components/AddPriceLevelComponen
 
 export default function EditTicketPage({ tickets, selectedTicket }) {
   const [ticket, setTicket] = useState(null);
-  const [priceLevels, setPriceLevels] = useState([]);
-  const [ticketLevels, setTicketLevels] = useState([]);
+  const [priceLevels, setPriceLevels] = useState(selectedTicket.priceLevels);
+  const [ticketLevels, setTicketLevels] = useState(selectedTicket.ticketLevels);
+  const [levels, setLevels] = useState(null);
+  const [maxAmountOfTickets, setMaxAmountOfTickets] = useState(
+    selectedTicket.maxAmount
+  );
+  const [startingPrice, setStartingPrice] = useState(
+    selectedTicket.priceLevels[0]
+  );
 
   const {
     reset,
     control,
     register,
+    watch,
     formState: { errors },
     handleSubmit,
   } = useForm();
@@ -22,105 +30,115 @@ export default function EditTicketPage({ tickets, selectedTicket }) {
   };
 
   const incrementStair = () => {
-    const newPriceLevels = [...priceLevels];
-    const newTicketLevels = [...ticketLevels];
-    newPriceLevels.push("");
-    newTicketLevels.push("");
-    setPriceLevels(newPriceLevels);
-    setTicketLevels(newTicketLevels);
-    append({});
+    if (levels) {
+      const newLevels = [...levels];
+      newLevels.push({ price: "", amount: "" });
+      setLevels(newLevels);
+    } else {
+      const formLevels = watch("levels");
+      const newLevels = [...formLevels];
+      newLevels.push({ price: "", amount: "" });
+      setLevels(newLevels);
+    }
+    // const newPriceLevels = [...priceLevels];
+    // const newTicketLevels = [...ticketLevels];
+    // newPriceLevels.push("");
+    // newTicketLevels.push("");
+    // setPriceLevels(newPriceLevels);
+    // setTicketLevels(newTicketLevels);
+    // append({});
+    console.log("LEVELS: ", levels);
   };
 
   let { fields, append, remove } = useFieldArray({
     control, // control props comes from useForm (optional: if you are using FormContext)
-    name: "test", // unique name for your Field Array
+    name: "levels", // unique name for your Field Array
   });
-
-  useEffect(() => {
-    const keyToSearch = "sk";
-    const valueToSearch = selectedTicket;
-
-    // Find the object with the specified value for the key
-    const foundObject = tickets.find(
-      (item) => item[keyToSearch] === valueToSearch
-    );
-
-    if (foundObject) {
-      setTicket(foundObject);
-      setTicketLevels(foundObject.ticketLevels);
-      setPriceLevels(foundObject.priceLevels);
-    } else {
-      console.log("Object not found.");
-    }
-  }, []);
 
   return (
     <>
       <div className="min-h-screen">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-          <div className="flex items-center bg-neutral-100 py-2 px-6 rounded-full shadow-lg mt-4">
-            <p className="text-xl leading-none text-center w-1/2">
-              Max antal biljetter
-            </p>
-            <input
-              autoComplete="off"
-              className="py-4 pl-4 w-1/2 text-2xl bg-neutral-100"
-              type="number"
-              defaultValue={ticket ? ticket.maxAmount : ""}
-              placeholder="Antal"
-              {...register("amount", { required: true, maxLength: 80 })}
-            />
-          </div>
-          <div className="flex items-center bg-neutral-100 py-2 px-6 rounded-full shadow-lg mt-4">
-            <p className="text-xl leading-none text-center w-1/2">Startpris</p>
-            <input
-              autoComplete="off"
-              className="py-4 pl-4 w-1/2 text-2xl bg-neutral-100"
-              type="number"
-              defaultValue={ticket ? ticket.price : ""}
-              placeholder="Pris"
-              {...register("price", { required: true, maxLength: 80 })}
-            />
-          </div>
-          <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-4"></div>
-          <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto"></div>
-          <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto"></div>
-
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-2 mt-12"
+        >
           {/* <AddPriceLevelComponent /> */}
-          <div className="">
-            {priceLevels.length < 2
-              ? priceLevels.map((item, index) => (
-                  <>
-                    <div key={item.id} className="flex gap-2 items-center mb-4">
-                      <input
-                        type="number"
-                        defaultValue={priceLevels[index]}
-                        {...register(`test.${index}.price`)}
-                        className="py-4 pl-6 rounded-lg shadow-md w-[50%]"
-                      />
-                      <input
-                        type="number"
-                        defaultValue={ticketLevels[index]}
-                        {...register(`test.${index}.amount`)}
-                        className="py-4 pl-6 rounded-lg shadow-md w-[50%]"
-                      />
-                      {/* <div onClick={() => removeItem(index)}>
+          <div className="px-4">
+            {priceLevels.map((item, index) => (
+              <div key={index}>
+                {index === 0 ? (
+                  <div className="flex w-full text-xl text-center">
+                    <p className="flex-1 pl-2 pb-2">Startpris</p>
+                    <p className="flex-1 pl-2 pb-2">Max biljetter</p>
+                  </div>
+                ) : null}
+                <div className="flex gap-2 items-center mb-4">
+                  <div className="py-4 relative flex text-center rounded-lg border-2 border-neutral-200 shadow-md w-[50%]">
+                    <input
+                      type="number"
+                      defaultValue={priceLevels[index]}
+                      {...register(`levels.${index}.price`)}
+                      className="w-full text-center text-2xl"
+                    />
+                    <p className="flex-1 text-2xl absolute right-4">sek</p>
+                  </div>
+                  <div className="py-4 relative flex text-center rounded-lg border-2 border-neutral-200 shadow-md w-[50%]">
+                    <input
+                      type="number"
+                      defaultValue={ticketLevels[index]}
+                      {...register(`levels.${index}.amount`)}
+                      className="w-full text-center text-2xl"
+                    />
+                    <p className="flex-1 text-2xl absolute right-4">st</p>
+                  </div>
+
+                  {/* <div onClick={() => removeItem(index)}>
                     <Trash width={18} fill="#f87171" />
                   </div> */}
-                    </div>
-                    <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-4"></div>
-                    <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-2"></div>
-                    <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-2"></div>
-                  </>
-                ))
-              : null}
-            <button
-              type="button"
-              onClick={() => incrementStair()}
-              className="bg-neutral-300 w-1/4 flex justify-center py-2 rounded-2xl shadow-lg mb-4"
-            >
-              <Plus width={17} />
-            </button>
+                </div>
+                <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-4"></div>
+                <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-2"></div>
+                <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-2"></div>
+              </div>
+            ))}
+            {priceLevels.length < 2 ? (
+              <>
+                <div className="flex w-full text-xl text-center">
+                  <p className="flex-1 pl-2 pb-2">Höj till</p>
+                  <p className="flex-1 pl-2 pb-2">Efter</p>
+                </div>
+                <div className="flex gap-2 items-center mb-4">
+                  <div className="py-4 relative flex text-center rounded-lg border-2 border-neutral-200 shadow-md w-[50%]">
+                    <input
+                      type="number"
+                      {...register(`levels.${1}.price`)}
+                      className="w-full text-center text-2xl"
+                    />
+                    <p className="flex-1 text-2xl absolute right-4">sek</p>
+                  </div>
+                  <div className="py-4 relative flex text-center rounded-lg border-2 border-neutral-200 shadow-md w-[50%]">
+                    <input
+                      type="number"
+                      {...register(`levels.${1}.amount`)}
+                      className="w-full text-center text-2xl"
+                    />
+                    <p className="flex-1 text-2xl absolute right-4">st</p>
+                  </div>
+                  {/* <div onClick={() => removeItem(index)}>
+                    <Trash width={18} fill="#f87171" />
+                  </div> */}
+                </div>
+              </>
+            ) : null}
+            <div className="w-full flex justify-center">
+              <button
+                type="button"
+                onClick={() => incrementStair()}
+                className="bg-neutral-100 border-2 border-neutral-400 w-1/4 flex justify-center py-2 rounded-2xl shadow-lg mb-4 mt-2"
+              >
+                <Plus width={17} fill="gray" />
+              </button>
+            </div>
           </div>
 
           <input
@@ -137,6 +155,24 @@ export default function EditTicketPage({ tickets, selectedTicket }) {
 
 export async function getServerSideProps({ query }) {
   // Call external API from here directly
+  const res = await fetch(
+    "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: "getTicket",
+        eventId: query.eventId,
+        ticketClass: query.ticket,
+      }),
+    }
+  );
+
+  const data = await res.json();
+
+  console.log("getTicket: ", data);
 
   const res2 = await fetch(
     "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
@@ -157,6 +193,6 @@ export async function getServerSideProps({ query }) {
   console.log("query: ", query);
 
   return {
-    props: { tickets: data2.tickets, selectedTicket: query.ticket },
+    props: { tickets: data2.tickets, selectedTicket: data.event },
   };
 }

@@ -99,7 +99,6 @@ export default function CreateEventPage({ toggleActive }) {
     const msg = await lambdaResponse.json();
 
     //Could do this on aws...
-    await fetch("/api/trigger-revalidation?path=/");
 
     const id = msg.eventId;
 

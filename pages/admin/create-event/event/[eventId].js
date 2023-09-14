@@ -85,7 +85,9 @@ export default function EventPage({ event, tickets }) {
   };
 
   const goToEditTicket = (ticket) => {
-    router.push(`/admin/tickets/edit-ticket/${event.sk}?ticket=${ticket.sk}`);
+    router.push(
+      `/admin/tickets/edit-ticket/${event.sk}?ticket=${ticket.sk}&eventId=${event.sk}`
+    );
   };
 
   const goBack = () => {
@@ -119,6 +121,8 @@ export default function EventPage({ event, tickets }) {
   const dateNumber = newDateObj.dayOfMonth;
 
   const dateString = `${day} ${month} ${dateNumber}`;
+
+  console.log("THESE ARE ALL THE TICKETS: ", allTickets);
 
   if (selectedTicket) {
     return (
@@ -220,7 +224,7 @@ export default function EventPage({ event, tickets }) {
                       <div className="bg-neutral-50 flex justify-center items-center pt-2 pb-3 pl-3 pr-2 rounded-xl drop-shadow-2xl">
                         <Edit
                           width="35px"
-                          height="35px"
+                          cdight="35px"
                           fill="#7e22ce"
                           className=""
                         />
@@ -243,7 +247,7 @@ export default function EventPage({ event, tickets }) {
                           <>
                             {" "}
                             <div
-                              onClick={() => goToEditTicket(ticket)}
+                              // onClick={() => goToEditTicket(ticket)}
                               className={`relative mr-4 md:flex-1 w-[80vw] h-[400px] text-center flex-shrink-0 snap-start bg-gradient-to-tl from-neutral-200 to-neutral-100 ${
                                 ticket.sk === "Student"
                                   ? "bg-gradient-to-tl from-green-200 to-green-100"

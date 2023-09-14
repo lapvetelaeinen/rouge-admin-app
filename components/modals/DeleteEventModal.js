@@ -36,8 +36,6 @@ export default function DeleteEventModal({
       body: JSON.stringify(payload),
     });
 
-    await fetch("/api/trigger-revalidation?path=/");
-
     router.push("/admin/create-event");
   };
 

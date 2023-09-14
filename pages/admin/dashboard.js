@@ -68,16 +68,16 @@ export default function Dashboard() {
             onClick={() => Router.push("/admin/create-event")}
           >
             <Add width="35px" height="35px" fill="rgb(38 38 38)" />
-            <p>Skapa event</p>
+            <p>Events och biljetter</p>
           </div>
 
-          <div
+          {/* <div
             className="text-center flex flex-col justify-center items-center bg-neutral-100 py-10 rounded-md shadow-md gap-2 text-neutral-600 mr-4 flex-1"
             onClick={() => Router.push("/admin/add-tickets")}
           >
             <Ticket width="35px" height="35px" fill="rgb(38 38 38)" />
             <p>Släpp biljetter</p>
-          </div>
+          </div> */}
 
           <div
             onClick={() => Router.push("/admin/sales")}
