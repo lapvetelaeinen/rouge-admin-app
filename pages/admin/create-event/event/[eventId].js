@@ -247,7 +247,7 @@ export default function EventPage({ event, tickets }) {
                           <>
                             {" "}
                             <div
-                              // onClick={() => goToEditTicket(ticket)}
+                              onClick={() => goToEditTicket(ticket)}
                               className={`relative mr-4 md:flex-1 w-[80vw] h-[400px] text-center flex-shrink-0 snap-start bg-gradient-to-tl from-neutral-200 to-neutral-100 ${
                                 ticket.sk === "Student"
                                   ? "bg-gradient-to-tl from-green-200 to-green-100"

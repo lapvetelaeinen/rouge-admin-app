@@ -36,6 +36,8 @@ export default function EditEventModal({ toggleEdit, event, saveChanges }) {
       },
     };
 
+    console.log("Payload: ", payload);
+
     const lambdaResponse = await fetch("/api/aws", {
       method: "POST",
       body: JSON.stringify(payload),
@@ -68,8 +70,6 @@ export default function EditEventModal({ toggleEdit, event, saveChanges }) {
 
     router.push("/admin/create-event");
   };
-
-  console.log(event.date);
 
   const toggleAskToDelete = () => {
     setIsAskToDeletActive(!isAskToDeleteActive);
@@ -106,7 +106,7 @@ export default function EditEventModal({ toggleEdit, event, saveChanges }) {
             className="py-4 pl-4 text-2xl drop-shadow-md"
             placeholder="Info"
             defaultValue={event.info}
-            {...register("info", { maxLength: 100 })}
+            {...register("info")}
           />
 
           <DatePicker
