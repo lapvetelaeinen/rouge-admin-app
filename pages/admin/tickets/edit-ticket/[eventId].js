@@ -3,9 +3,12 @@ import { useForm, useFieldArray } from "react-hook-form";
 import Plus from "../../../../components/svg-components/Plus";
 import RougeButton from "../../../../components/RougeButton";
 import AddPriceLevelComponent from "../../../../components/AddPriceLevelComponent";
+import AngleDown from "../../../../components/svg-components/AngleDown";
+import { useRouter } from "next/router";
 
 export default function EditTicketPage({ tickets, selectedTicket }) {
   const [ticket, setTicket] = useState(null);
+  const [error, setError] = useState(null);
   const [priceLevels, setPriceLevels] = useState(selectedTicket.priceLevels);
   const [ticketLevels, setTicketLevels] = useState(selectedTicket.ticketLevels);
   const [levels, setLevels] = useState(selectedTicket.levels);
@@ -16,8 +19,11 @@ export default function EditTicketPage({ tickets, selectedTicket }) {
     selectedTicket.priceLevels[0]
   );
 
+  const router = useRouter();
+
   const {
     reset,
+    unregister,
     control,
     register,
     watch,
@@ -25,99 +31,174 @@ export default function EditTicketPage({ tickets, selectedTicket }) {
     handleSubmit,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const deleteField = (field) => {
+    const fieldIndex = field.split(".")[1];
+
+    const newLevels = [...levels];
+    newLevels.splice(fieldIndex, 1);
+    unregister(`levels`);
+    setLevels(newLevels);
+    console.log(newLevels);
   };
 
-  const incrementStair = () => {
-    const currentLevels = [...levels];
-    const formLevels = watch("levels");
-    const lastLevel = formLevels[formLevels.length - 1];
-    const lastLevelPrice = Number(lastLevel.price);
-    const lastLevelAmount = Number(lastLevel.amount);
-    const secondLastLevel = formLevels[formLevels.length - 2];
-    const secondLastLevelPrice = Number(secondLastLevel.price);
-    const secondLastLevelAmount = Number(secondLastLevel.amount);
+  const onSubmit = (data) => {
+    incrementStair("submit");
+  };
 
-    console.log("lastlevel price: ", lastLevelPrice);
-    console.log("secondlastlevel price: ", secondLastLevelPrice);
+  const incrementStair = async (method) => {
+    const formLevels = watch("levels");
+
+    console.log(formLevels);
 
     //get max amount of tickets from form
     const maxAmount = Number(formLevels[0].amount);
     setMaxAmountOfTickets(maxAmount);
 
-    //calculate total amount of tickets
-    let amountOfTickets = 0;
+    const newLevels = [];
+    const currentError = null;
 
-    formLevels.forEach((level, index) => {
-      if (index === 0) {
-        return;
-      }
-
+    for (let index = 0; index < formLevels.length; index++) {
+      const level = formLevels[index];
       const amount = Number(level.amount);
       const price = Number(level.price);
-      const previousLevel = formLevels[index - 1];
-      const previousAmount = Number(previousLevel.amount);
-      const previousPrice = Number(previousLevel.price);
 
-      if (index === 1 && amount >= previousAmount) {
-        console.log("AMOUNT: ", amount);
-        console.log("PREVIOUS AMOUNT: ", previousAmount);
-        console.log("Du har överskridit maxgränsen för biljetter!");
-        return;
-      } else if (index != 1 && amount <= previousAmount) {
-        console.log("AMOUNT: ", amount);
-        console.log("PREVIOUS AMOUNT: ", previousAmount);
-        console.log(
-          "Du måste ange ett antal biljetter som är högre än det förra!"
-        );
-        return;
-      } else if (price <= previousPrice) {
-        console.log("Du måste ange ett högre pris än förra nivån!");
-        return;
+      if (index === 0) {
+        if (amount <= 0) {
+          setError({
+            type: "amount",
+            field: index,
+            message: "Antalet biljetter måste vara högre än 0",
+          });
+          currentError = true;
+          newLevels.push({ amount: amount, price: price });
+          return;
+        } else if (price <= 0) {
+          setError({
+            type: "price",
+            field: index,
+            message: "Priset måste vara högre än 0",
+          });
+          currentError = true;
+          newLevels.push({ amount: amount, price: price });
+          return;
+        } else {
+          newLevels.push({ amount: amount, price: price });
+          // newLevels.push({ price: 0, amount: 0 });
+        }
       }
 
-      amountOfTickets += amount;
-    });
+      if (index != 0) {
+        const previousLevel = formLevels[index - 1];
+        const previousAmount = Number(previousLevel.amount);
+        const previousPrice = Number(previousLevel.price);
 
-    console.log("This is total amount of tickets: ", amountOfTickets);
+        if (index === 1) {
+          if (amount >= previousAmount || amount <= 0) {
+            // Check if it is the first level and amount is greater than or equal to the previous amount or 0.
+            setError({
+              type: "amount",
+              field: index,
+              message:
+                "Antalet biljetter måste vara mindre än max antalet och högre än 0",
+            });
+            currentError = true;
+            newLevels.push({ amount: amount, price: price });
+            return;
+          } else if (price <= previousPrice) {
+            // Check if it is the first level and price is less than or equal to the previous price.
+            setError({
+              type: "price",
+              field: index,
+              message: "Du måste ange ett högre pris än startpriset!",
+            });
+            currentError = true;
+            newLevels.push({ amount: amount, price: price });
+            return;
+          } else {
+            newLevels.push({ amount: amount, price: price });
 
-    // if (lastLevelAmount <= secondLastLevelAmount && ) {
-    //   console.log("LAST LEVEL AMOUNT: ", lastLevelAmount);
-    //   console.log("SECOND LAST LEVEL AMOUNT: ", secondLastLevelAmount);
-    //   console.log(
-    //     "Du måste ange ett högre antal biljetter än den förra nivån."
-    //   );
+            // newLevels.push({ price: 0, amount: 0 });
+          }
+        } else {
+          if (amount <= previousAmount || amount >= maxAmount) {
+            // If it is not the first level, the amount needs to be higher than the previous level.
+            setError({
+              type: "amount",
+              field: index,
+              message:
+                "Du måste ange ett högre antal biljetter än förra nivån!",
+            });
+            currentError = true;
+            newLevels.push({ amount: amount, price: price });
+            return;
+          } else if (price <= previousPrice) {
+            // If it is not the first level, the price needs to be higher than the previous level's price.
+            setError({
+              type: "price",
+              field: index,
+              message: "Du måste ange ett högre pris än förra nivån!",
+            });
+            currentError = true;
+            newLevels.push({ amount: amount, price: price });
+            return;
+          } else {
+            newLevels.push({ amount: amount, price: price });
+            // newLevels.push({ price: 0, amount: 0 });
+            // newLevel = { amount: amount, price: price };
+          }
+        }
+      }
+    }
+
+    if (!currentError && method != "submit") {
+      setError(null);
+      newLevels.push({ price: 0, amount: 0 });
+    }
+
+    // if (lastLevelPrice === 0 || lastLevelPrice <= secondLastLevelPrice) {
+    //   console.log("Du måste ange ett högre pris än förra nivån");
     //   return;
     // }
 
-    if (lastLevelPrice === 0 || lastLevelPrice <= secondLastLevelPrice) {
-      console.log("Du måste ange ett högre pris än förra nivån");
-      return;
-    }
+    // if (lastLevelAmount >= maxAmount) {
+    //   console.log("Du har överskridit antalet maxbiljetter!");
+    //   return;
+    // }
 
-    if (lastLevelAmount >= maxAmount) {
-      console.log("Du har överskridit antalet maxbiljetter!");
-      return;
-    }
+    // if (lastLevelAmount === 0 || lastLevelAmount >= maxAmount) {
+    //   console.log("something wrong with amount");
+    //   return;
+    // }
 
-    if (lastLevelAmount === 0 || lastLevelAmount >= maxAmount) {
-      console.log("something wrong with amount");
-      return;
-    }
+    // const newLevels = [...levels];
 
-    const newLevels = [...levels];
-    newLevels.push({ price: 0, amount: 0 });
     setLevels(newLevels);
 
-    // const newPriceLevels = [...priceLevels];
-    // const newTicketLevels = [...ticketLevels];
-    // newPriceLevels.push("");
-    // newTicketLevels.push("");
-    // setPriceLevels(newPriceLevels);
-    // setTicketLevels(newTicketLevels);
-    // append({});
-    console.log("LEVELS: ", levels);
+    if (method === "submit" && !currentError) {
+      const payload = {
+        type: "updateTicket",
+        event: {
+          pk: selectedTicket.pk,
+          sk: selectedTicket.sk,
+          maxAmount: newLevels[0].amount,
+          price: newLevels[0].price,
+          levels: newLevels,
+        },
+      };
+
+      const lambdaResponse = await fetch("/api/aws", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+
+      console.log("res: ", lambdaResponse);
+      setError(null);
+      router.push(`/admin/create-event/event/${selectedTicket.pk}`);
+      return;
+    }
+
+    console.log("LEVELS: ", newLevels);
+    console.log("FORMLEVELS: ", formLevels);
   };
 
   let { fields, append, remove } = useFieldArray({
@@ -146,55 +227,104 @@ export default function EditTicketPage({ tickets, selectedTicket }) {
               <div key={index}>
                 {index === 0 ? (
                   <div className="flex w-full text-xl text-center">
-                    <p className="flex-1 pl-2 pb-2">Startpris</p>
-                    <p className="flex-1 pl-2 pb-2">Max biljetter</p>
+                    <p className="flex-1 pl-2 pb-2 font-semibold">Startpris</p>
+                    <p className="flex-1 pl-2 pb-2 font-semibold">
+                      Max biljetter
+                    </p>
                   </div>
                 ) : null}
                 <div className="flex flex-col gap-2 items-center mb-4">
                   {index != 0 ? (
-                    <div className="flex w-full text-center">
+                    <div className="flex w-full text-lg text-center">
                       <p className="flex-1 w-full">Höj priset till</p>
                       <p className="flex-1 w-full">Efter</p>
                     </div>
                   ) : null}
-                  <div className="flex gap-2">
-                    <div className="py-4 relative flex text-center rounded-lg border-2 border-neutral-200 shadow-md w-[50%]">
+                  <div className="relative flex gap-2">
+                    <div
+                      className={`${
+                        error && error.field === index && error.type === "price"
+                          ? "bg-red-200 border-red-400"
+                          : ""
+                      } py-4 relative flex text-center rounded-lg border-2 border-neutral-200 shadow-md w-[50%]`}
+                    >
                       <input
                         type="number"
                         defaultValue={levels[index].price}
                         {...register(`levels.${index}.price`)}
-                        className="w-full text-center text-2xl"
+                        className={`${
+                          error &&
+                          error.field === index &&
+                          error.type === "price"
+                            ? "bg-red-200"
+                            : ""
+                        } w-full text-center text-2xl`}
                       />
                       <p className="flex-1 text-2xl absolute right-4">sek</p>
                     </div>
-                    <div className="py-4 relative flex text-center rounded-lg border-2 border-neutral-200 shadow-md w-[50%]">
+                    <div
+                      className={`${
+                        error &&
+                        error.field === index &&
+                        error.type === "amount"
+                          ? "bg-red-200 border-red-400"
+                          : ""
+                      } py-4 relative flex text-center rounded-lg border-2 border-neutral-200 shadow-md w-[50%]`}
+                    >
                       <input
                         type="number"
                         defaultValue={levels[index].amount}
                         {...register(`levels.${index}.amount`)}
-                        className="w-full text-center text-2xl"
+                        className={`${
+                          error &&
+                          error.field === index &&
+                          error.type === "amount"
+                            ? "bg-red-200"
+                            : ""
+                        } w-full text-center text-2xl`}
                       />
                       <p className="flex-1 text-2xl absolute right-4">st</p>
                     </div>
+                    {index > 0 && index === levels.length - 1 ? (
+                      <div className="absolute right-0 bottom-0 translate-y-[120%] flex items-center z-50">
+                        <div
+                          onClick={() => deleteField(`levels.${index}`)}
+                          className="bg-red-200 border-2 border-red-500 rounded-xl px-6 p-2 flex items-center justify-center"
+                        >
+                          Ta bort nivå
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
+                  {error && error.field === index ? (
+                    <p className="text-center px-6 text-red-600">
+                      {error.message}
+                    </p>
+                  ) : null}
 
                   {/* <div onClick={() => removeItem(index)}>
                     <Trash width={18} fill="#f87171" />
                   </div> */}
                 </div>
-                <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-4"></div>
-                <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-2"></div>
-                <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-2"></div>
+                <div className="flex flex-col relative justify-center items-center">
+                  <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-2"></div>
+                  <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-2"></div>
+                  <div className="w-[2px] h-[10px] bg-neutral-400 mx-auto mt-2"></div>
+                  <div className="absolute bottom-0 translate-y-[70%] translate-x-[-0.8px]">
+                    <AngleDown width={12} fill="#a3a3a3" />
+                  </div>
+                </div>
               </div>
             ))}
 
-            <div className="w-full flex justify-center">
+            <div className="w-full flex justify-center mt-8">
               <button
                 type="button"
                 onClick={() => incrementStair()}
-                className="bg-neutral-100 border-2 border-neutral-400 w-1/4 flex justify-center py-2 rounded-2xl shadow-lg mb-4 mt-2"
+                className="bg-neutral-100 border-2 border-neutral-400 px-6 flex justify-center items-center gap-2 py-2 rounded-2xl shadow-lg mb-4 mt-2"
               >
-                <Plus width={17} fill="gray" />
+                <p>Lägg till nivå</p>
+                <Plus width={12} fill="gray" />
               </button>
             </div>
           </div>
@@ -202,10 +332,18 @@ export default function EditTicketPage({ tickets, selectedTicket }) {
           <input
             type="submit"
             value="Spara ändringar"
-            className="bg-purple-500 text-white drop-shadow-md py-5 text-2xl rounded-full mb-2 mt-6"
+            className="bg-purple-500 mx-4 text-white drop-shadow-md py-5 text-2xl rounded-full mb-2 mt-6"
           />
-          <RougeButton type="secondary" text="Avbryt" />
         </form>
+
+        <div
+          onClick={() =>
+            router.push(`/admin/create-event/event/${selectedTicket.pk}`)
+          }
+          className="border-2 border-neutral-700 mx-4 text-neutral-700 text-center py-5 text-2xl rounded-full mb-2 mt-6 mb-24"
+        >
+          Avbryt
+        </div>
       </div>
     </>
   );
