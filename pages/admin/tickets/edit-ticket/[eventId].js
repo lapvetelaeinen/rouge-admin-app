@@ -175,12 +175,15 @@ export default function EditTicketPage({ tickets, selectedTicket }) {
     setLevels(newLevels);
 
     if (method === "submit" && !currentError) {
+      const maxAmount = newLevels[0].amount;
+      newLevels[0].amount = 0;
+
       const payload = {
         type: "updateTicket",
         event: {
           pk: selectedTicket.pk,
           sk: selectedTicket.sk,
-          maxAmount: newLevels[0].amount,
+          maxAmount: maxAmount,
           price: newLevels[0].price,
           levels: newLevels,
         },
@@ -273,7 +276,11 @@ export default function EditTicketPage({ tickets, selectedTicket }) {
                     >
                       <input
                         type="number"
-                        defaultValue={levels[index].amount}
+                        defaultValue={
+                          index === 0
+                            ? maxAmountOfTickets
+                            : levels[index].amount
+                        }
                         {...register(`levels.${index}.amount`)}
                         className={`${
                           error &&
