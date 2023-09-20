@@ -209,13 +209,13 @@ export default function EditTicketPage({ tickets, selectedTicket }) {
     name: "levels", // unique name for your Field Array
   });
 
-  useEffect(() => {
-    if (levels.length < 2) {
-      const newLevels = [...levels];
-      newLevels.push({ price: 0, amount: 0 });
-      setLevels(newLevels);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (levels.length < 2) {
+  //     const newLevels = [...levels];
+  //     newLevels.push({ price: 0, amount: 0 });
+  //     setLevels(newLevels);
+  //   }
+  // }, []);
 
   return (
     <>

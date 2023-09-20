@@ -25,7 +25,7 @@ export default function CreateTicketsModal({ goBack, eventId }) {
   };
 
   const onSubmit = async (data) => {
-    const levels = [{ price: Number(data.price), amount: Number(data.amount) }];
+    const levels = [{ price: Number(data.price), amount: 0 }];
 
     const payload = {
       type: "createTicket",
@@ -33,7 +33,7 @@ export default function CreateTicketsModal({ goBack, eventId }) {
         pk: eventId,
         sk: data.ticketClass,
         price: data.price,
-        maxAmount: data.amount,
+        maxAmount: Number(data.amount),
         levels: levels,
         info: data.info,
       },
