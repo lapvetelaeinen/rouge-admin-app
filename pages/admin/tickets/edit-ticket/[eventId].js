@@ -359,7 +359,7 @@ export default function EditTicketPage({ tickets, selectedTicket }) {
 export async function getServerSideProps({ query }) {
   // Call external API from here directly
   const res = await fetch(
-    "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+    "https://pb0u12mmmh.execute-api.eu-north-1.amazonaws.com/rouge/admin",
     {
       method: "POST",
       headers: {
@@ -379,7 +379,7 @@ export async function getServerSideProps({ query }) {
   console.log("LEVELS: ", ticketInfo.levels);
 
   const res2 = await fetch(
-    "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+    "https://pb0u12mmmh.execute-api.eu-north-1.amazonaws.com/rouge/admin",
     {
       method: "POST",
       headers: {
