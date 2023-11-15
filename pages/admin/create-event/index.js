@@ -16,7 +16,7 @@ export default function AddEventPage() {
 
   const getAllEvents = async () => {
     const res = await fetch(
-      "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+      "https://pb0u12mmmh.execute-api.eu-north-1.amazonaws.com/rouge/admin",
       {
         method: "POST",
         headers: {
