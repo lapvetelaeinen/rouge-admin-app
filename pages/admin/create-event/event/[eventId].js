@@ -328,7 +328,7 @@ export async function getServerSideProps({ params }) {
   // Call external API from here directly
 
   const res = await fetch(
-    "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+    "https://pb0u12mmmh.execute-api.eu-north-1.amazonaws.com/rouge/admin",
     {
       method: "POST",
       headers: {
@@ -342,7 +342,7 @@ export async function getServerSideProps({ params }) {
   );
 
   const res2 = await fetch(
-    "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+    "https://pb0u12mmmh.execute-api.eu-north-1.amazonaws.com/rouge/admin",
     {
       method: "POST",
       headers: {
