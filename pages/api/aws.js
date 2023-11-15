@@ -11,7 +11,7 @@ export default async (req, res) => {
     console.log("Call amazon");
     console.log(event);
     const res = await fetch(
-      "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+      "https://pb0u12mmmh.execute-api.eu-north-1.amazonaws.com/rouge/admin",
       {
         method: "POST",
         headers: {
@@ -31,7 +31,7 @@ export default async (req, res) => {
     console.log("Call amazon");
     console.log(event);
     const res = await fetch(
-      "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+      "https://pb0u12mmmh.execute-api.eu-north-1.amazonaws.com/rouge/admin",
       {
         method: "POST",
         body: JSON.stringify({ type: "getAllSales" }),
@@ -48,7 +48,7 @@ export default async (req, res) => {
     console.log("Call amazon");
     console.log(event);
     const res = await fetch(
-      "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+      "https://pb0u12mmmh.execute-api.eu-north-1.amazonaws.com/rouge/admin",
       {
         method: "POST",
         headers: {
@@ -68,7 +68,7 @@ export default async (req, res) => {
     console.log("Call amazon");
     console.log(event);
     const res = await fetch(
-      "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+      "https://pb0u12mmmh.execute-api.eu-north-1.amazonaws.com/rouge/admin",
       {
         method: "POST",
         headers: {
@@ -88,7 +88,7 @@ export default async (req, res) => {
     console.log("Call amazon");
     console.log(event);
     const res = await fetch(
-      "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+      "https://pb0u12mmmh.execute-api.eu-north-1.amazonaws.com/rouge/admin",
       {
         method: "POST",
         headers: {
@@ -108,7 +108,7 @@ export default async (req, res) => {
     console.log("Call amazon");
     console.log(event);
     const res = await fetch(
-      "https://h6yb5bsx6a.execute-api.eu-north-1.amazonaws.com/rouge/admin",
+      "https://pb0u12mmmh.execute-api.eu-north-1.amazonaws.com/rouge/admin",
       {
         method: "POST",
         headers: {
